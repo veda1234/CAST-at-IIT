@@ -1,0 +1,22 @@
+.column {
+ float: left;
+ text-align: center;
+  width: 33.33%;
+  padding: 40px;
+  position:relative;
+  color:white;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.centered {
+   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

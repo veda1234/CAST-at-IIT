@@ -1,0 +1,3 @@
+﻿Site No.,Source Thickness,Horizontal Transverse Dispersivity,Vertical Transverse Dispersivity,Source Width,Threshold Contaminant Concentration,Partner Reactant Concentration,Contaminant Concentration,Reaction Stoichiometric Ratio,Model Plume Length
+1,10,0.01,0.001,7,0.005,8,5,3,11166.18
+2,5,0.01,0.1,7,0.005,8,5,3,131.28

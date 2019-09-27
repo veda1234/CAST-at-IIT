@@ -1,0 +1,6 @@
+<div class="graph" id="year_histogram">
+    <script>
+        var graphs = {{year_histogram | safe}};
+        Plotly.newPlot('year_histogram',graphs['data'],graphs['layout'],{ responsive: true });
+    </script>
+</div>

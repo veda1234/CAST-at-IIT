@@ -1,0 +1,12 @@
+Site No.,Site Unit,Compound ,Aquifer thickness[m],Plume length[m],Plume Width[m],Hydraulic conductivity[10-3 [m/s]],Electron Donor[mg/l],Electron Acceptors : O2[mg/l],NO3[mg/l],SO4[mg/l],Fe(II)[mg/l],Plume state,Chem. Group,Country,Literature Source
+113,Baiddc,BTEX,8,100,62,0.0004,0.09,0.8,0.1,0.8,4.5,NA,BTEX,India,Wieldner
+114,Baiddc,BTEX,8.9,150,62,0.05,0.09,8,0.1,0.8,4.5,NA,BTEX,India,Wieldnera
+115,Baiddc,BTEX,8,100,62,0.0004,1,0.8,3,0.8,4.5,NA,BTEX,India,Wieldner
+116,sdf,sdf,2,100,9,9,9,9,9,9,9,NA,BTEX,NewDelhi,Wieldner
+117,Hill,BTEX,8,100,80,0.03,8,6.2,9,8,8,NA,BTEX,India,Wieldner
+118,Hill AFB,BTEX,8,100,62,0.0004,0.09,0.8,3,1,4,NA,BTEX,India,Wieldner
+119,Hill AFB,BTEX,8,101,62,0.0004,0.09,9,3,1,4,NA,BTEX,India,Wieldner
+120,Baiddc,BTEX,8.0,100,62,0.0004,0.09,9,3,1,4,NA,BTEX,India,Wieldner
+121,Baiddc,BTEX,8.0,105,62,0.0004,0.09,9,3,0.8,4,NA,BTEX,India,Wieldner
+122,Baiddc,BTEX,8.0,100,62,0.0004,0.09,9,2,1,4,NA,BTEX,India,"Wieldner, 1994"
+123,AFB,BTEX,8.0,100,62,0.0004,0.09,9,3,1,4,NA,BTEX,India,Wieldner

@@ -1,0 +1,124 @@
+{% extends 'baseLayoutSinglePlots.html' %}
+{% block title %}Liedl et al. (2011){%endblock%}
+{% block li %}
+<div class="dropdownNew">
+            <button class="dropbtnNew">Liedl et al. (2011)
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-contentNew">
+                <a href="{{ url_for('documentation3DLiedl')}}">Model Description</a>
+                <a href="{{ url_for('liedl3DModelMultiple')}}">Multiple Computing Simulation</a>
+            </div>
+        </div>
+{%endblock%}
+{% block content %}
+<div class="graph">
+        <div class="row">
+            <div class="col-lg-5 col-sm-5 col-xs-5">
+                <h2>Liedl et al. (2011)</h2>
+                <img src="static/liedl2011.png">
+                <br>
+                <form class="form-inline" action="/liedl3DSinglePlot" method="POST">
+                    <div class="form-group">
+                        1.Source Thickness (M) : <label class="sr-only">Thickness</label>
+                        <input type="number" class="form-control" id="Thickness" name="Thickness" placeholder="M" required min=0 step="any" value="10">
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        2.Vertical Transverse Dispersivity (Tv) : <label class="sr-only">VDispersivity</label>
+                        <input type="number" class="form-control" id="VDispersivity" name="VDispersivity" placeholder="Tv" required min=0 step="any" value="0.01">
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        3.Source Width : <label class="sr-only">SourceWidth</label>
+                        <input type="number" class="form-control" id="SourceWidth" name="SourceWidth" placeholder="W" required min=0 step="any" value="7">
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        4.Horizontal Transverse Dispersivity (Th) : <label class="sr-only">Dispersivity</label>
+                        <input type="number" class="form-control" id="Dispersivity" name="Dispersivity" placeholder="Th" required min=0 step="any" value="0.01">
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        5.Stoichiometric Ratio (Gamma) : <label class="sr-only">Stoichiometric</label>
+                        <input type="number" class="form-control" id="Stoichiometric" name="Stoichiometric" placeholder="Gamma" required min=0 step="any" value="3">
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        6.Electron Acceptor (Ca) : <label class="sr-only">Acceptor</label>
+                        <input type="number" class="form-control" id="Acceptor" name="Acceptor" placeholder="Ca" required min=0 step="any" value="8">
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        7.Electron Donor (Cd) : <label class="sr-only">Donor</label>
+                        <input type="number" class="form-control" id="Donor" name="Donor" placeholder="Cd" required min=0 step="any" value="5">
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        8.Threshold Contaminant Concentration (Ct) : <label class="sr-only">Threshold</label>
+                        <input type="number" class="form-control" id="Threshold" name="Threshold" placeholder="Ct" required min=0 step="any" value="0.5">
+                    </div>
+                    <br><br>
+                <div>
+                    <button class="btn btn-primary" type="submit" id="b">Generate Graph</button>
+                </div>
+                    </form>
+                    <br>
+                    <div id="successAlert" class="alert alert-success" role="alert" style="display:none;"></div>
+                <div class="grid-container">
+                    <div id="sliderThickness" class="slidecontainer" style="display: none">
+                    <label> Thickness </label>
+                    <input type="range" min="0.1" max="6" value="3.1" class="slider" id='scatterplot_fits'>
+                    <p>Value: <span id="thicknessVal"></span></p>
+                </div>
+                <div id="sliderDispersivity" class="slidecontainer" style="display: none">
+                    <label> Horizontal Dispersivity </label>
+                    <input type="range" min="0.0001" max="0.01" value="0.005" step="0.0001" class="slider" id='parameters'>
+                    <p>Value: <span id="dispersivityVal"></span></p>
+                </div>
+                <div id="sliderVerticalDispersivity" class="slidecontainer" style="display: none">
+                    <label> Vertical Dispersivity </label>
+                    <input type="range" min="0.0001" max="0.01" value="0.005" step="0.0001"  class="slider" id='verticalDispersivity'>
+                    <p>Value: <span id="VdispersivityVal"></span></p>
+                </div>
+                <div id="sliderWidth" class="slidecontainer" style="display: none">
+                    <label> Width </label>
+                    <input type="range" min="0.1" max="6" value="3.1" class="slider" id='width'>
+                    <p>Value: <span id="widthVal"></span></p>
+                </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-xs-6">
+                <button class="btn btn-primary" id="fullScreen">View full screen graph</button>
+                <div id="response">
+                    <div class="graph" id="year_histogram">
+                        <script>
+                            var graphs = {{year_histogram | safe}};
+                             Plotly.newPlot('year_histogram',graphs['data'],graphs['layout'],{ responsive: true });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="{{ url_for('static', filename='js/liedl3D.js') }}"></script>
+{% endblock %}
+
+{% block script %}
+var VdispersivitySlider = document.getElementById("verticalDispersivity");
+var widthSlider = document.getElementById("width");
+
+
+var vdispersivityOutput = document.getElementById("VdispersivityVal");
+var widthOutput = document.getElementById("widthVal");
+
+vdispersivityOutput.innerHTML = VdispersivitySlider.value;
+widthOutput.innerHTML = widthSlider.value;
+
+VdispersivitySlider.oninput = function() {
+  vdispersivityOutput.innerHTML = this.value;
+}
+widthSlider.oninput = function() {
+  widthOutput.innerHTML = this.value;
+}
+{% endblock %}
