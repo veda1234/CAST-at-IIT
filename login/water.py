@@ -8,6 +8,7 @@ from flask import render_template, url_for, flash, redirect, request
 from flask_login import login_user, current_user, logout_user, login_required
 
 from login import app, db, bcrypt
+from login.NumericalModel.numericalModel import numerical_model
 from login.assignParameterValue import assign_parameter_value
 from login.dataStorage import *
 from login.databasePlots import create_bargraph, create_histogram, create_boxplot
@@ -25,7 +26,6 @@ from login.scatterplotAnalyticalModel import create_liedlPlotMultiple, create_ch
     create_HamPlotMultiple, create_Liedl3DMultiple
 from login.scatterplotSingleMode import create_singlePlot
 from login.scatterplotsEmpiricalModel import create_MaierAndGrathwohlPlotMultiple, create_BirlaEtAlPlotMultiple
-from login.NumericalModel.numericalModel import numerical_model
 
 matplotlib.use('Agg')
 
@@ -137,7 +137,7 @@ def database():
                            column_names=Parameters.User_data_columns)
 
 
-@app.route('/dispersivityData', methods=['POST','GET'])
+@app.route('/dispersivityData', methods=['POST', 'GET'])
 def dispersivity():
     x = dispersivity_graphs()
     return render_template('DispersivityData/dispersivityData.html', data=x.to_html())
@@ -702,7 +702,7 @@ def numericalModel():
         Lx = form.Lx.data
         Ly = form.Ly.data
         ztop = form.ztop.data
-        zbot = form.zbot.data
+        zbot = -1
         ncol = form.ncol.data
         nrow = form.nrow.data
         nlay = form.nlay.data
@@ -722,7 +722,10 @@ def numericalModel():
         tran_bound_2 = form.tran_bound_2.data
         tran_bound_3 = form.tran_bound_3.data
         tran_bound_4 = form.tran_bound_4.data
-        lMax = numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk, perlen,
-                        flow_bound_1, flow_bound_2, tran_bound_1, tran_bound_2, tran_bound_3, tran_bound_4)
-        return jsonify(
-            {'Result': lMax, 'data': render_template('NumericalModel/numericalModel', form=form)})
+        lMax = numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk,
+                               perlen,
+                               flow_bound_1, flow_bound_2, tran_bound_1, tran_bound_2, tran_bound_3, tran_bound_4)
+        lMax = "%.2f" % lMax
+        string = 'Maximum Plume Length(LMax): '+str(lMax)
+        flash(string, 'success')
+    return render_template('NumericalModel/numericalModel.html', form=form)

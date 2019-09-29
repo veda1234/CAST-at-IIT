@@ -1,3 +1,4 @@
+import glob
 import os
 
 import flopy
@@ -101,26 +102,12 @@ def numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamm
 
     # clear up all memory
     ucnobj.close()
-    os.remove("T02_mf.bas")
-    os.remove("T02_mf.dis")
-    os.remove("T02_mf.gmg")
-    os.remove("T02_mf.list")
-    os.remove("T02_mf.lmt6")
-    os.remove("T02_mf.lpf")
-    os.remove("T02_mf.nam")
-    os.remove("T02_mt.adv")
-    os.remove("T02_mt.btn")
-    os.remove("T02_mt.dsp")
-    os.remove("T02_mt.gcg")
-    os.remove("T02_mt.list")
-    os.remove("T02_mt.nam")
-    os.remove("T02_mt.ssm")
-    os.remove("MT3D001.UCN")
+    for filename in glob.glob("T02_mf*"):
+        os.remove(filename)
+    for filename in glob.glob("T02_mt*"):
+        os.remove(filename)
     os.remove("MT3D001.MAS")
     os.remove("MT3D.CNF")
     os.remove("mt3d_link.ftl")
     return plume_length
 
-
-lmax = numerical_model()
-print(lmax)

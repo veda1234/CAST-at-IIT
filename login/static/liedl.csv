@@ -1,10 +1,4 @@
-Site No.,Aquifer thickness,Transverse Dispersivity,Reaction Stochiometric coefficient ,Contaminant Concentration,Reactant Concentration,Model Plume Length
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-4,5,0.01,3.5,8,5,1419.31
-,,,,,,
-5,2.99,0.01,1,30,0.5,93.51
+Aquifer thickness,Transverse Dispersivity,Reaction Stochiometric coefficient ,Contaminant Concentration,Reactant Concentration
+5,0.01,3.5,8,5
+,,,,
+2.99,0.01,1,30,0.5

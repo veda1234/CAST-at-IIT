@@ -1,6 +1,2 @@
-﻿Site No.,Aquifer Thickness,Vertical Transverse Dispersivity,Reaction Stoichiometric Ratio,Partner Reactant Concentration,Contaminant Concentration,Model Plume Length
-1,2,0.1,3.5,8,5,25.29
-,,,,,,
-2,5,0.001,3.5,8,5,15808.64
-,,,,,,
-3,5,0.1,1.5,8,5,122.6
+﻿Aquifer Thickness,Vertical Transverse Dispersivity,Reaction Stoichiometric Ratio,Partner Reactant Concentration,Contaminant Concentration
+5,0.01,3.5,8,5

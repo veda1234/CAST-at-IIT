@@ -1,6 +1,6 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
 
 from login.models import User
@@ -142,11 +142,11 @@ class NumericalForm(FlaskForm):
     # Domain
     Lx = FloatField('Lx', validators=[DataRequired()])
     Ly = FloatField('Ly', validators=[DataRequired()])
-    ztop = FloatField('ztop', validators=[DataRequired()])
+    ztop = IntegerField('ztop', validators=[InputRequired()])
     zbot = FloatField('zbot', validators=[DataRequired()])
-    ncol = FloatField('ncol', validators=[DataRequired()])
-    nrow = FloatField('nrow', validators=[DataRequired()])
-    nlay = FloatField('nlay', validators=[DataRequired()])
+    ncol = IntegerField('ncol', validators=[DataRequired()])
+    nrow = IntegerField('nrow', validators=[DataRequired()])
+    nlay = IntegerField('nlay', validators=[DataRequired()])
     # Parameters
     prsity = FloatField('prsity', validators=[DataRequired()])
     al = FloatField('al', validators=[DataRequired()])
@@ -155,7 +155,7 @@ class NumericalForm(FlaskForm):
     Cd = FloatField('Cd', validators=[DataRequired()])
     Ca = FloatField('Ca', validators=[DataRequired()])
     h1 = FloatField('h1', validators=[DataRequired()])
-    h2 = FloatField('h2', validators=[DataRequired()])
+    h2 = FloatField('h2', validators=[InputRequired()])
     hk = FloatField('hk', validators=[DataRequired()])
     perlen = FloatField('perlen', validators=[DataRequired()])
     # Flow
