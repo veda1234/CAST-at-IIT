@@ -102,12 +102,4 @@ def numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamm
 
     # clear up all memory
     ucnobj.close()
-    for filename in glob.glob("T02_mf*"):
-        os.remove(filename)
-    for filename in glob.glob("T02_mt*"):
-        os.remove(filename)
-    os.remove("MT3D001.MAS")
-    os.remove("MT3D.CNF")
-    os.remove("mt3d_link.ftl")
     return plume_length
-

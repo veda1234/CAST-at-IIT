@@ -1,5 +1,7 @@
 import json
 import math
+import os
+import glob
 
 import matplotlib
 import pandas as pd
@@ -502,8 +504,8 @@ def liedl3DModelMultiple():
         Tv = form.Vertical_Transverse_Dispersivity.data
         W = form.Source_Width.data
         Ct = form.Threshold_Contaminant_Concentration.data
-        Ca = form.Contaminant_Concentration.data
-        Cd = form.Partner_Reactant_Concentration.data
+        Cd = form.Contaminant_Concentration.data
+        Ca = form.Partner_Reactant_Concentration.data
         g = form.Stoichiometric_Ratio.data
         input = Ca, Cd, Ct, g, M, Th, Tv, W
         year_histogram, lMax = create_liedl3DPlot(input)
@@ -722,10 +724,21 @@ def numericalModel():
         tran_bound_2 = form.tran_bound_2.data
         tran_bound_3 = form.tran_bound_3.data
         tran_bound_4 = form.tran_bound_4.data
-        lMax = numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk,
-                               perlen,
-                               flow_bound_1, flow_bound_2, tran_bound_1, tran_bound_2, tran_bound_3, tran_bound_4)
-        lMax = "%.2f" % lMax
-        string = 'Maximum Plume Length(LMax): '+str(lMax)
-        flash(string, 'success')
+        try:
+            lMax = numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk,
+                                   perlen,
+                                   flow_bound_1, flow_bound_2, tran_bound_1, tran_bound_2, tran_bound_3, tran_bound_4)
+            lMax = "%.2f" % lMax
+            string = 'Maximum Plume Length(LMax): ' + str(lMax)
+            flash(string, 'success')
+        except Exception as e:
+            flash('No contour levels were found within the data range', 'danger')
+        # clear memory
+        for filename in glob.glob("T02_mf*"):
+            os.remove(filename)
+        for filename in glob.glob("T02_mt*"):
+            os.remove(filename)
+        os.remove("MT3D001.MAS")
+        os.remove("MT3D.CNF")
+        os.remove("mt3d_link.ftl")
     return render_template('NumericalModel/numericalModel.html', form=form)

@@ -156,10 +156,10 @@ def check_file_for_liedl3d_equation(plume, current_user, Liedl3D, db):
         htv = convert_and_clean_inputs(plume, 'Horizontal Transverse Dispersivity')
         tv = convert_and_clean_inputs(plume, 'Vertical Transverse Dispersivity')
         w = convert_and_clean_inputs(plume, 'Source Width')
-        cd = convert_and_clean_inputs(plume, 'Partner Reactant Concentration')
+        ca = convert_and_clean_inputs(plume, 'Partner Reactant Concentration')
         cth = convert_and_clean_inputs(plume, 'Threshold Contaminant Concentration')
         a = convert_and_clean_inputs(plume, 'Reaction Stoichiometric Ratio')
-        ca = convert_and_clean_inputs(plume, 'Contaminant Concentration')
+        cd = convert_and_clean_inputs(plume, 'Contaminant Concentration')
         plume_length = len(m)
         for i in range(plume_length):
             input = ca[i], cd[i], cth[i], a[i], m[i], htv[i], tv[i], w[i]

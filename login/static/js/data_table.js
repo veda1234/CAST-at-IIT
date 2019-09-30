@@ -56,5 +56,6 @@ $(document).ready(function () {
 
         // Save the updated rowId's array to local-storage
         localStorage.setItem("rowIds", JSON.stringify(selectedRowIds));
+
     });
 });
