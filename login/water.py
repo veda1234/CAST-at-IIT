@@ -703,11 +703,8 @@ def numericalModel():
     if form.validate_on_submit():
         Lx = form.Lx.data
         Ly = form.Ly.data
-        ztop = form.ztop.data
-        zbot = -1
         ncol = form.ncol.data
         nrow = form.nrow.data
-        nlay = form.nlay.data
         prsity = form.prsity.data
         al = form.al.data
         trpt = form.trpt.data
@@ -717,28 +714,22 @@ def numericalModel():
         h1 = form.h1.data
         h2 = form.h2.data
         hk = form.hk.data
-        perlen = form.perlen.data
-        flow_bound_1 = form.flow_bound_1.data
-        flow_bound_2 = form.flow_bound_2.data
-        tran_bound_1 = form.tran_bound_1.data
-        tran_bound_2 = form.tran_bound_2.data
-        tran_bound_3 = form.tran_bound_3.data
-        tran_bound_4 = form.tran_bound_4.data
-        try:
-            lMax = numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk,
-                                   perlen,
-                                   flow_bound_1, flow_bound_2, tran_bound_1, tran_bound_2, tran_bound_3, tran_bound_4)
-            lMax = "%.2f" % lMax
-            string = 'Maximum Plume Length(LMax): ' + str(lMax)
-            flash(string, 'success')
-        except Exception as e:
-            flash('No contour levels were found within the data range', 'danger')
-        # clear memory
-        for filename in glob.glob("T02_mf*"):
-            os.remove(filename)
-        for filename in glob.glob("T02_mt*"):
-            os.remove(filename)
-        os.remove("MT3D001.MAS")
-        os.remove("MT3D.CNF")
-        os.remove("mt3d_link.ftl")
+        if not (h1 > h2):
+            flash('Value of head inlet should be greater than value of head outlet', 'danger')
+        else:
+            try:
+                lMax = numerical_model(Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk)
+                lMax = "%.2f" % lMax
+                string = 'Maximum Plume Length(LMax): ' + str(lMax)
+                flash(string, 'success')
+            except Exception as e:
+                flash('No contour levels were found within the data range', 'danger')
+            # clear memory
+            for filename in glob.glob("T02_mf*"):
+                os.remove(filename)
+            for filename in glob.glob("T02_mt*"):
+                os.remove(filename)
+            os.remove("MT3D001.MAS")
+            os.remove("MT3D.CNF")
+            os.remove("mt3d_link.ftl")
     return render_template('NumericalModel/numericalModel.html', form=form)

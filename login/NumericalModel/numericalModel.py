@@ -1,22 +1,18 @@
-import glob
-import os
-
 import flopy
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk, perlen,
-                    flow_bound_1, flow_bound_2, tran_bound_1, tran_bound_2, tran_bound_3, tran_bound_4):
+def numerical_model(Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk):
     # Domain
 
     Lx = Lx
     Ly = Ly
-    ztop = ztop
-    zbot = zbot
+    ztop = 0
+    zbot = -1
     ncol = ncol
     nrow = nrow
-    nlay = nlay
+    nlay = 1
     delx = Lx / ncol
     dely = Ly / nrow
     delv = (ztop - zbot) / nlay
@@ -32,7 +28,7 @@ def numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamm
     h1 = h1
     h2 = h2
     hk = hk
-    perlen = perlen
+    perlen = 6000
 
     # Flow Calculation
 
@@ -41,8 +37,8 @@ def numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamm
                                    perlen=perlen)
 
     ibound = np.ones((nlay, nrow, ncol), dtype=np.int32)
-    ibound[:, :, 0] = flow_bound_1
-    ibound[:, :, -1] = flow_bound_2
+    ibound[:, :, 0] = -1
+    ibound[:, :, -1] = -1
     strt = np.ones((nlay, nrow, ncol), dtype=np.float32)
     strt[:, :, 0] = h1
     strt[:, :, -1] = h2
@@ -60,10 +56,10 @@ def numerical_model(Lx, Ly, ztop, zbot, ncol, nrow, nlay, prsity, al, trpt, Gamm
     mt = flopy.mt3d.Mt3dms(modelname='T02_mt', exe_name='mt3dms5b', modflowmodel=mf)
 
     icbund = np.ones((nlay, nrow, ncol), dtype=np.int32)
-    icbund[:, :, 0] = tran_bound_1  # first column
-    icbund[:, :, -1] = tran_bound_2  # last column
-    icbund[:, 0, :] = tran_bound_3  # first row
-    icbund[:, 0, 0] = tran_bound_4  # first cell
+    icbund[:, :, 0] = -1  # first column
+    icbund[:, :, -1] = -1  # last column
+    icbund[:, 0, :] = -1  # first row
+    icbund[:, 0, 0] = -1  # first cell
     sconc = np.zeros((nlay, nrow, ncol), dtype=np.float32)
     sconc[:, :, 0] = (Gamma * Cd) + 2 * abs(Ca)
     sconc[:, :, -1] = Ca + 2 * abs(Ca)

@@ -59,32 +59,6 @@ color: #444444;
                     {% endif%}
                 </div>
                 <div class="form-group">
-                    {{form.ztop.label(class="form-control-label")}}
-                    {% if form.ztop.errors %}
-                    {{form.ztop(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.ztop.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.ztop(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-                <div class="form-group">
-                    {{form.zbot.label(class="form-control-label")}}
-                    {% if form.zbot.errors %}
-                    {{form.zbot(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.zbot.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.zbot(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-                <div class="form-group">
                     {{form.ncol.label(class="form-control-label")}}
                     {% if form.ncol.errors %}
                     {{form.ncol(class="form-control form-control-lg is-invalid")}}
@@ -108,107 +82,6 @@ color: #444444;
                     </div>
                     {% else %}
                     {{form.nrow(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-                <div class="form-group">
-                    {{form.nlay.label(class="form-control-label")}}
-                    {% if form.nlay.errors %}
-                    {{form.nlay(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.nlay.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.nlay(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-            </fieldset>
-        </div>
-        <div class="content-section">
-            <h3>Transport Calculation</h3>
-            <fieldset class="form-group">
-                <div class="form-group">
-                    {{form.tran_bound_1.label(class="form-control-label")}}
-                    {% if form.tran_bound_1.errors %}
-                    {{form.tran_bound_1(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.tran_bound_1.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.tran_bound_1(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-                <div class="form-group">
-                    {{form.tran_bound_2.label(class="form-control-label")}}
-                    {% if form.tran_bound_2.errors %}
-                    {{form.tran_bound_2(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.tran_bound_2.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.tran_bound_2(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-                <div class="form-group">
-                    {{form.tran_bound_3.label(class="form-control-label")}}
-                    {% if form.tran_bound_3.errors %}
-                    {{form.tran_bound_3(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.tran_bound_3.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.tran_bound_3(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-                <div class="form-group">
-                    {{form.tran_bound_4.label(class="form-control-label")}}
-                    {% if form.tran_bound_4.errors %}
-                    {{form.tran_bound_4(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.tran_bound_4.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.tran_bound_4(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-            </fieldset>
-        </div>
-        <div class="content-section">
-            <h3>Flow Calculations</h3>
-            <fieldset class="form-group">
-                <div class="form-group">
-                    {{form.flow_bound_1.label(class="form-control-label")}}
-                    {% if form.flow_bound_1.errors %}
-                    {{form.flow_bound_1(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.flow_bound_1.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.flow_bound_1(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
-                <div class="form-group">
-                    {{form.flow_bound_2.label(class="form-control-label")}}
-                    {% if form.flow_bound_2.errors %}
-                    {{form.flow_bound_2(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.flow_bound_2.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.flow_bound_2(class="form-control form-control-lg")}}
                     {% endif%}
                 </div>
             </fieldset>
@@ -284,6 +157,7 @@ color: #444444;
             </fieldset>
         </div>
         <div class="content-section">
+            <h3>&nbsp;</h3>
             <fieldset class="form-group">
                 <div class="form-group">
                     {{form.Ca.label(class="form-control-label")}}
@@ -337,24 +211,12 @@ color: #444444;
                     {{form.hk(class="form-control form-control-lg")}}
                     {% endif%}
                 </div>
-                <div class="form-group">
-                    {{form.perlen.label(class="form-control-label")}}
-                    {% if form.perlen.errors %}
-                    {{form.perlen(class="form-control form-control-lg is-invalid")}}
-                    <div class="invalid-feedback">
-                        {% for error in form.perlen.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor%}
-                    </div>
-                    {% else %}
-                    {{form.perlen(class="form-control form-control-lg")}}
-                    {% endif%}
-                </div>
             </fieldset>
         </div>
         <div class="form-group">
             {{form.submit(class="btn btn-outline-info")}}
-
+            </div>
+        <div class="form-group">
         {% with messages = get_flashed_messages(with_categories=true)%}
                 {%if messages%}
                     {% for category, message in messages%}

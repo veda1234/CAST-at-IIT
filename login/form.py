@@ -1,7 +1,7 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, IntegerField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired, NumberRange
 
 from login.models import User
 
@@ -138,32 +138,31 @@ class MaierGrathwohlForm(FlaskForm):
     submit = SubmitField('Generate Graph')
 
 
+def less_than(FlaskForm, field):
+    if field.data >= 5:
+        raise ValidationError('Field must be less than 5')
+
+
 class NumericalForm(FlaskForm):
     # Domain
-    Lx = FloatField('Lx', validators=[DataRequired()])
-    Ly = FloatField('Ly', validators=[DataRequired()])
-    ztop = IntegerField('ztop', validators=[InputRequired()])
-    zbot = FloatField('zbot', validators=[DataRequired()])
-    ncol = IntegerField('ncol', validators=[DataRequired()])
-    nrow = IntegerField('nrow', validators=[DataRequired()])
-    nlay = IntegerField('nlay', validators=[DataRequired()])
+    Lx = FloatField('Length[m]', validators=[InputRequired(),
+                                             NumberRange(max=2500,
+                                                         message='Please enter a value lesser than or equal to 2500')])
+    Ly = FloatField('Height[m]', validators=[InputRequired(), less_than])
+    ncol = IntegerField('No. of columns', validators=[InputRequired()])
+    nrow = IntegerField('No. of rows', validators=[InputRequired()])
     # Parameters
-    prsity = FloatField('prsity', validators=[DataRequired()])
-    al = FloatField('al', validators=[DataRequired()])
-    trpt = FloatField('trpt', validators=[DataRequired()])
-    Gamma = FloatField('Gamma', validators=[DataRequired()])
-    Cd = FloatField('Cd', validators=[DataRequired()])
-    Ca = FloatField('Ca', validators=[DataRequired()])
-    h1 = FloatField('h1', validators=[DataRequired()])
-    h2 = FloatField('h2', validators=[InputRequired()])
-    hk = FloatField('hk', validators=[DataRequired()])
-    perlen = FloatField('perlen', validators=[DataRequired()])
-    # Flow
-    flow_bound_1 = FloatField('flow_bound_1', validators=[DataRequired()])
-    flow_bound_2 = FloatField('flow_bound_2', validators=[DataRequired()])
-    # Transport
-    tran_bound_1 = FloatField('tran_bound_1', validators=[DataRequired()])
-    tran_bound_2 = FloatField('tran_bound_2', validators=[DataRequired()])
-    tran_bound_3 = FloatField('tran_bound_3', validators=[DataRequired()])
-    tran_bound_4 = FloatField('tran_bound_4', validators=[DataRequired()])
+    prsity = FloatField('Porosity',
+                        validators=[InputRequired(),
+                                    NumberRange(
+                                        min=0, max=1,
+                                        message='Please enter a value in the range of 0-1(inclusive))')])
+    al = FloatField('Longitudinal Dispersivity[m]', validators=[InputRequired()])
+    trpt = FloatField('Transverse Vertical Dispersivity[m]', validators=[InputRequired()])
+    Gamma = FloatField('Stoichiometric Ratio', validators=[InputRequired()])
+    Cd = FloatField('Contaminant Concentration[mg/l]', validators=[InputRequired()])
+    Ca = FloatField('Partner Reactant Concentration[mg/l]', validators=[InputRequired()])
+    h1 = FloatField('Head inlet[m]', validators=[InputRequired()])
+    h2 = FloatField('Head outlet[m]', validators=[InputRequired()])
+    hk = FloatField('Conductivity[m/d]', validators=[InputRequired()])
     submit = SubmitField('Run')
