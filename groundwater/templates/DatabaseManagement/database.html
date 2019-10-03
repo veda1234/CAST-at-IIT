@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Site Database</title>
+      <style>
+        .user-db{
+            margin: 30px;
+        }
+        table{
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 1px solid #d4d4d4;
+        }
+        tr:nth-child(even){
+            background: #f1f1f1;
+        }
+        th, td{
+            height = "10"
+        }
+        th{
+            border-bottom: 1px solid #d4d4d4;
+        }
+        .right{
+            text-align: right;
+            float: right;
+        }
+    </style>
+    <!-- Bootstrap core CSS -->
+    <!--<link href="static/css/bootstraps.min.css" rel="stylesheet">-->
+    <script src="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></script>
+    <link href="static/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="static/css/bootstrapForPopUp.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <script type="text/javascript" src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script type="text/javascript" src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    {# jQuery DataTables #}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+
+  </head>
+
+  <body>
+    <nav class="navbarNew">
+    <span class="open-slide">
+      <a href="#" onclick="openSlideMenu()">
+        <svg width="30" height="30">
+            <path d="M0,5 30,5" stroke="#fff" stroke-width="5"/>
+            <path d="M0,14 30,14" stroke="#fff" stroke-width="5"/>
+            <path d="M0,23 30,23" stroke="#fff" stroke-width="5"/>
+        </svg>
+      </a>
+    </span>
+
+    <ul class="navbar-navNew">
+      <li><a href="{{ url_for('index')}}">Home</a></li>
+        <li><div class="dropdownNew">
+            <button class="dropbtnNew">Analysis Visualisation
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-contentNew">
+                <a href="{{ url_for('allPlots')}}">All Plots</a>
+                <a href="{{ url_for('bargraph')}}">Bargraph</a>
+                <a href="{{ url_for('boxplot')}}">Boxplots</a>
+                <a href="{{ url_for('histogram')}}">Histograms</a>
+                <a href="{{ url_for('scatterplot')}}">Scatterplots</a>
+                <a href="{{ url_for('statistics')}}">Statistical Analysis</a>
+            </div>
+        </div>
+        </li>
+        <li><div class="dropdownNew">
+            <button class="dropbtnNew">Analytical Model
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-contentNew">
+                <a href="{{ url_for('analyticalModel')}}">All Models</a>
+                <a href="{{ url_for('documentationLiedl')}}">Liedl et al.(2005)</a>
+                <a href="{{ url_for('documentationChu')}}">Chu et al.(2004)</a>
+                <a href="{{ url_for('documentationHam')}}">Ham et al.(2004)</a>
+                <a href="{{ url_for('documentation3DLiedl')}}">Liedl et al.(2011)</a>
+            </div>
+        </div>
+        </li>
+        <li><div class="dropdownNew">
+            <button class="dropbtnNew">Empirical Models
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-contentNew">
+                <a href="{{ url_for('empiricalModel')}}">All Models</a>
+                <a href="{{ url_for('documentationMaierAndGrathwohl')}}">Maier And Grathwohl(2005)</a>
+                <a href="{{ url_for('documentationBirlaEtAl')}}">Birla et al.(2019)</a>
+            </div>
+        </div>
+        </li>
+        <li><a class="pull-right" href="{{ url_for('logout')}}">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div id="side-menu" class="side-nav">
+    <a href="#" class="btn-close" onclick="closeSlideMenu()">&times;</a>
+    <a href="{{ url_for('index')}}">Home</a>
+    <a href="{{ url_for('analyticalModel')}}">Analytical Models</a>
+  </div>
+  {% block body %}
+    <main role="main" class="container">
+      <div class="row">
+        <div class="container-fluid">
+            <br>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                  {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                      {{ message }}
+                    </div>
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+         <h2>Site Database</h2>
+        <div id='table-container'>
+            </div>
+            <a href="{{ url_for('dispersivity')}}"><button class="btn btn-light">Dispersivity Data</button></a>
+            <h2>Your Database</h2>
+            <a href="static/sample_db.csv" download><button type="button" class="btn btn-light">Download Sample File</button></a>
+            <form method="post" enctype="multipart/form-data" class="dropzone-box">
+                  <input name="file" type="file" class="btn btn-light btn-lg"/>
+                  <button type="submit" id="upload" class="btn btn-light">Upload</button>
+              <button type="button" class="btn btn-light" id="add" data-toggle="modal" data-target="#myModal">Add Data
+        </button>
+                </form>
+                <table class="table content-section display" id="data-table">
+                    <thead class="thead-light">
+                    <tr>
+                        {% for name in column_names %}
+                            <th scope="col">{{ name }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for data in table_data %}
+                        <tr id="{{ data[0] }}_table">
+                            {% for value in data %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Please Insert Data</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="">
+                {{form.hidden_tag()}}
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {{form.Site_Unit.label(class="form-control-label")}}
+                        {% if form.Site_Unit.errors %}
+                                {{form.Site_Unit(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Site_Unit.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Site_Unit(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Compound.label(class="form-control-label")}}
+                        {% if form.Compound.errors %}
+                                {{form.Compound(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Compound.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Compound(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Aquifer_thickness.label(class="form-control-label")}}
+                        {% if form.Aquifer_thickness.errors %}
+                                {{form.Aquifer_thickness(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Aquifer_thickness.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Aquifer_thickness(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Plume_length.label(class="form-control-label")}}
+                        {% if form.Plume_length.errors %}
+                                {{form.Plume_length(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Plume_length.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Plume_length(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Plume_Width.label(class="form-control-label")}}
+                        {% if form.Plume_Width.errors %}
+                                {{form.Plume_Width(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Plume_Width.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Plume_Width(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Hydraulic_conductivity.label(class="form-control-label")}}
+                        {% if form.Hydraulic_conductivity.errors %}
+                                {{form.Hydraulic_conductivity(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Hydraulic_conductivity.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Hydraulic_conductivity(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Electron_Donor.label(class="form-control-label")}}
+                        {% if form.Electron_Donor.errors %}
+                                {{form.Electron_Donor(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Electron_Donor.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Electron_Donor(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.O2.label(class="form-control-label")}}
+                        {% if form.O2.errors %}
+                                {{form.O2(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.O2.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.O2(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.NO3.label(class="form-control-label")}}
+                        {% if form.NO3.errors %}
+                                {{form.NO3(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.NO3.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.NO3(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.SO4.label(class="form-control-label")}}
+                        {% if form.SO4.errors %}
+                                {{form.SO4(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.SO4.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.SO4(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Fe.label(class="form-control-label")}}
+                        {% if form.Fe.errors %}
+                                {{form.Fe(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Fe.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Fe(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Plume_state.label(class="form-control-label")}}
+                        {% if form.Plume_state.errors %}
+                                {{form.Plume_state(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Plume_state.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Plume_state(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Chem_Group.label(class="form-control-label")}}
+                        {% if form.Chem_Group.errors %}
+                                {{form.Chem_Group(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Chem_Group.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Chem_Group(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Country.label(class="form-control-label")}}
+                        {% if form.Country.errors %}
+                                {{form.Country(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Country.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Country(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                    <div class="form-group">
+                        {{form.Literature_Source.label(class="form-control-label")}}
+                        {% if form.Literature_Source.errors %}
+                                {{form.Literature_Source(class="form-control form-control-lg is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.Literature_Source.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor%}
+                                </div>
+                            {% else %}
+                                {{form.Literature_Source(class="form-control form-control-lg")}}
+                            {% endif%}
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    {{form.submit(class="btn btn-outline-info")}}
+                </div>
+            </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+      </div>
+    </main>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery.csv.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="static/js/csv_to_html_table.js"></script>
+    <script src="{{ url_for('static', filename='js/data_table.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+    {# jQuery DataTables #}
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+
+  <script type="text/javascript">
+      function format_link(link){
+        if (link)
+          return "<a href='" + link + "' target='_blank'>" + link + "</a>";
+        else
+          return "";
+      }
+      var selectedIds = [];
+      CsvToHtmlTable.init({
+        csv_path: 'static/original.csv?_' + Math.random(),
+        element: 'table-container',
+        allow_download: true,
+        csv_options: {separator: ',', delimiter: '"'},
+        datatables_options: {"lengthMenu":[ [10, 20, 50, -1], [10, 20, 50, "All"]], "scrollY": 300, "scrollX": true}
+      },
+      function (table) {
+        $('#table-container-table tbody').on('click', 'tr', function () {
+            $(this).toggleClass('active');
+            var rows = table.rows('.active').data();
+            selectedIds = [];
+            for(var i = 0; i < rows.length; i++){
+                selectedIds.push(rows[i][0]);
+            }
+            console.log(selectedIds);
+            $.ajax({
+            type: 'GET',
+            url: '/database',
+            data: {
+                siteUnits: JSON.stringify(selectedIds),
+            },
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                Plotly.newPlot('bargraph', data,data['layout'],{responsive:true});
+            }
+        });
+        });
+        $('#someAction').on('click', function () {
+            console.log(table.rows('.active').data());
+        });
+      });
+    </script>
+  <script>
+    function openSlideMenu(){
+      document.getElementById('side-menu').style.width = '250px';
+      document.getElementById('main').style.marginLeft = '250px';
+    }
+    function closeSlideMenu(){
+      document.getElementById('side-menu').style.width = '0';
+      document.getElementById('main').style.marginLeft = '0';
+    }
+  </script>
+  </body>
+</html>
+

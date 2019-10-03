@@ -1,0 +1,19 @@
+{% extends 'baseLayoutDocumentation.html' %}
+{% block title %}Analytical Model{% endblock %}
+{% block h2 %}ANALYTICAL MODEL{% endblock %}
+{% block content %}
+<div class="grid-container">
+    <div class="grid-item">
+        <h3>Liedl et al.(2005)</h3><a href="{{ url_for('documentationLiedl')}}"><h3>Click here to see the model</h3><br><br><img src="/static/liedl2005fig.png" style="zoom:40%;"/></a>
+    </div>
+    <div class="grid-item">
+        <h3>Chu et al.(2004)</h3><a href="{{ url_for('documentationChu')}}"><h3>Click here to see the model</h3><br><br><img src="/static/chu_fig.jpeg" style="zoom:70%;"/></a>
+    </div>
+    <div class="grid-item">
+        <h3>Ham et al.(2004)</h3><a href="{{ url_for('documentationHam')}}"><h3>Click here to see the model</h3><br><br><img src="/static/ham_fig.png" style="zoom:40%;"/></a>
+    </div>
+    <div class="grid-item">
+        <h3>Liedl et al.(2011)</h3><a href="{{ url_for('documentation3DLiedl')}}"><h3>Click here to see the model</h3><br><br><img src="/static/liedl2011fig.png" style="zoom:40%;"/></a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'baseLayoutDocumentation.html' %}
+{% block title %}Birla Et Al(2019){% endblock %}
+{% block liEmpirical %}
+        <div class="dropdownNew">
+            <button class="dropbtnNew">Birla et al.(2019)
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-contentNew">
+                <a href="{{ url_for('BirlaEtAlSingle')}}">Single Computing Simulation</a>
+                <a href="{{ url_for('BirlaEtAlModelMultiple')}}">Multiple Computing Simulation</a>
+            </div>
+        </div>
+{% endblock %}
+{% block content %}
+<h1 id="2.-Recharge-Rates-in-$L_{max}$:-2D-Empirical-Model--–-Birla-et-al.-(2019)$^*$"><strong>Recharge Rates in $L_{max}$: <u>2D</u> Empirical Model</strong>  – Birla et al. (2019)$^*$<a class="anchor-link" href="#2.-Recharge-Rates-in-%24L_%7Bmax%7D%24:-2D-Empirical-Model--%E2%80%93-Birla-et-al.-(2019)%24%5E*%24">¶</a></h1>
+<p><img src="static/birlafig(2019).png" alt="Output from Birla et al.(2019) model" style="zoom:70%;"></p>
+<p>Birla et al.(2019)* provides the following explicit expression for $L_{max}$:</p>
+$$
+L_{emp} = \big(1 - 0.047M^{0.404}  R^{1.883} \big)\frac{4M^2}{\pi^2 \alpha_{Tv}}\ln\bigg(\frac{4}{\pi} \frac{\gamma C_{ED}+C_{EA}}{C_{EA}}\bigg)
+$$<p>in which:</p>
+<p>$M$ = Source Thickness [L], which is equal to Aquifer thickness ($A_t$) [L]<br>
+$\alpha_{Tv}$ = Vertical Transverse Dispersivity [L]<br>
+$R$ = Recharge Rate [LT$^{-1}$]<br>
+$\gamma$ = Reaction stoichiometric ratio [ ]<br>
+$C_{ED}^\circ$ = Contaminant (Electron Donor) concentration [ML$^{-1}$]<br>
+$C_{EA}^\circ$ = Partner Reactant (Electron Acceptor) concentration [ML$^{-1}$]<br></p>
+<p><strong>The model is based on the following assumptions:</strong></p>
+<ol>
+<li>Steady-state condition in a homogeneous and isotropic aquifer.</li>
+<li>Add more:</li>
+</ol>
+<p><strong>Reference:</strong></p>
+<p>Birla, s., Yadav, P.K., Mahalawat, P., Haendel, F., Liedl, R., Chahar, B. 2019. Influence of recharge rates on steady-state plume lengths. Jour. Contam. Hydrol. (in review)</p>
+{% endblock %}

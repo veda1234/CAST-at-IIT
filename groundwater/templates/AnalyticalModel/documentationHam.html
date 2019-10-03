@@ -1,0 +1,32 @@
+{% extends 'baseLayoutDocumentation.html' %}
+{% block title %}Ham et al. (2004){% endblock %}
+{% block li %}
+        <div class="dropdownNew">
+            <button class="dropbtnNew">Ham et al. (2004)
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-contentNew">
+                <a href="{{ url_for('hamModelSingle')}}">Single Computing Simulation</a>
+                <a href="{{ url_for('hamModelMultiple')}}">Multiple Computing Simulation</a>
+            </div>
+        </div>
+{% endblock %}
+{% block content %}
+<h1 id="3.-2D-Model--–-Ham-et-al.-(2004)"><strong><u>2D</u> Model</strong>  – Ham et al. (2004)<a class="anchor-link" href="#3.-2D-Model--%E2%80%93-Ham-et-al.-(2004)">¶</a></h1><p>This 2D model, based on Ham et al. (2004), provides an estimate of a steady-state plume length ($L_{max}$ ) and explores the effects of longitudinal and transverse dispersivity on the steady state plume length.</p>
+<p><img src="static/ham_fig.png" alt="Output from Ham et al.(2004) model" style="zoom:40%;"></p>
+<p>Ham et al.(2004) provides the following explicit expression for $L_{max}$:</p>
+$$
+L_{max} = \frac{W^2}{4 \pi\alpha_{TH}}{\bigg(\frac{ C_{ED}^\circ }{ C_{EA}^\circ}\bigg)^2}
+$$<p>in which:</p>
+<p>$W$ = Width of contaminated source [L]<br>
+    $\alpha_{TH}$ = horizontal transverse dispersivity [L]<br>
+$C_{ED}^\circ$ = Contaminant (Electron Donor) concentration [ML$^{-1}$]<br>
+$C_{EA}^\circ$ = Partner Reactant (Electron Acceptor) concentration [ML$^{-1}$]</p>
+<p><strong>The model is based on the following assumptions:</strong></p>
+<ol>
+<li>A point source with constant mass flow injection.</li>
+<li>An instantaneous reaction between an injected compound and a reactant in the ambient groundwater at the plume fringe.</li>
+</ol>
+<p><strong>Reference:</strong>
+Ham, P.A.S., Schotting, R.J., Prommer, H., Davis, G.B., 2004. Effects of hydrodynamic dispersion on plume lengths for instantaneous bimolecular reactions. Adv. Water Resour. 27, 803–813. <a href="https://doi.org/10.1016/j.advwatres.2004.05.008">https://doi.org/10.1016/j.advwatres.2004.05.008</a></p>
+{% endblock %}

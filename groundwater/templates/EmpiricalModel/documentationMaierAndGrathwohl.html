@@ -1,0 +1,34 @@
+{% extends 'baseLayoutDocumentation.html' %}
+{% block title %}Maier And Grathwohl(2005){% endblock %}
+{% block liEmpirical %}
+        <div class="dropdownNew">
+            <button class="dropbtnNew">Maier And Grathwohl(2005)
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-contentNew">
+                <a href="{{ url_for('MaierAndGrathwohlSingle')}}">Single Computing Simulation</a>
+                <a href="{{ url_for('MaierAndGrathwohlModelMultiple')}}">Multiple Computing Simulation</a>
+            </div>
+        </div>
+{% endblock %}
+{% block content %}
+<h1 id="1.-Vertically-Oriented--2D-Empirical-Model-for-$L_{max}$----Maier-and-Grathwohl-(2006)"><strong>Vertically Oriented  <u>2D</u> Empirical Model for $L_{max}$</strong> -  Maier and Grathwohl (2006)<a class="anchor-link" href="#1.-Vertically-Oriented--2D-Empirical-Model-for-%24L_%7Bmax%7D%24----Maier-and-Grathwohl-(2006)">¶</a></h1><p>This 2D model, based on Maier and Grathwohl (2005), provides an estimate of a steady-state plume length ($L_{max}$ ) and analysed the sensitivity of the plume length with respect to biodegradation kinetics, flow velocity, transverse vertical
+dispersivity, the source and aquifer geometry and reaction stoichiometry.</p>
+<p><img src="static/liedl2005fig.png" alt="Output from Maier And Grathwohl(2005) model" style="zoom:40%;"></p>
+<p>Maier and Grathwohl (2005) provides the following explicit expression for $L_{max}$:</p>
+$$
+L_{max} = 0.5\frac{M^2}{\alpha_{Tv}} \bigg(\frac{\gamma C_{ED}}{C_{EA}}\bigg)^{0.3}
+$$<p>in which:</p>
+<p>$M$ = Source Thickness [L], which is equal to Aquifer thickness ($A_t$) [L]<br>
+$\alpha_{Tv}$ = Vertical Transverse Dispersivity [L]<br>
+$\gamma$ = Reaction stoichiometric ratio [ ]<br>
+$C_{ED}^\circ$ = Contaminant (Electron Donor) concentration [ML$^{-1}$]<br>
+$C_{EA}^\circ$ = Partner Reactant (Electron Acceptor) concentration [ML$^{-1}$]<br></p>
+<p><strong>The model is based on the following assumptions:</strong></p>
+<ol>
+<li>A uniform flow field in an aquifer of constant thickness is assumed.</li>
+<li>A completely contaminated aquifer thicknes (landfill or boundary source) is presumed.</li>
+</ol>
+<p><strong>Reference:</strong>
+U.Maier , P.Grathwohl 2005 . Numerical experiments and field results on the size of steady state plumes. <a href="https://doi.org/10.1016/j.jconhyd.2005.12.012">https://doi.org/10.1016/j.jconhyd.2005.12.012</a></p>
+{% endblock %}
