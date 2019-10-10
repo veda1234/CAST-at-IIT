@@ -196,8 +196,8 @@ def change_boxplot():
 @app.route('/bargraph', methods=['POST', 'GET'])
 def bargraph():
     table_data = user_database(current_user.id)
-    bargraph = create_bargraph(table_data)
-    return render_template('DatabaseManagement/bargraph.html', plot=bargraph)
+    plot = create_bargraph(table_data)
+    return render_template('DatabaseManagement/bargraph.html', plot=plot)
 
 
 @app.route('/boxplot', methods=['POST', 'GET'])
@@ -205,10 +205,10 @@ def boxplot():
     boxplot = 'Plume length[m]'
     table_data = user_database(current_user.id)
     index = assign_parameter_value(boxplot)
-    box = create_boxplot(boxplot, table_data, index)
+    plot = create_boxplot(boxplot, table_data, index)
     if request.method == 'POST':
         return redirect(url_for('DatabaseManagement/boxplot'))
-    return render_template('DatabaseManagement/boxplot.html', plot=box)
+    return render_template('DatabaseManagement/boxplot.html', plot=plot)
 
 
 @app.route('/histogram', methods=['POST', 'GET'])
@@ -217,10 +217,10 @@ def histogram():
     parameter = 'Plume length[m]'
     table_data = user_database(current_user.id)
     index = assign_parameter_value(parameter)
-    hist = create_histogram(histogramFeature, table_data, index, parameter)
+    plot = create_histogram(histogramFeature, table_data, index, parameter)
     if request.method == 'POST':
         return redirect(url_for('DatabaseManagement/histogram'))
-    return render_template('DatabaseManagement/histogram.html', plot=hist)
+    return render_template('DatabaseManagement/histogram.html', plot=plot)
 
 
 @app.route('/scatterplot', methods=['POST', 'GET'])
@@ -229,15 +229,15 @@ def scatterplot():
     scatterplot_fits = 'Exponential'
     table_data = user_database(current_user.id)
     index = assign_parameter_value(parameters)
-    bar = create_scatterplot(scatterplot_fits, parameters, table_data, index)
+    plot = create_scatterplot(scatterplot_fits, parameters, table_data, index)
     if request.method == 'POST':
         return redirect(url_for('DatabaseManagement/scatterplot'))
-    return render_template('DatabaseManagement/scatterplot.html', plot=bar)
+    return render_template('DatabaseManagement/scatterplot.html', plot=plot)
 
 
 @app.route('/statistics', methods=['POST', 'GET'])
 def statistics():
-    sa = pd.read_csv('login/static/original.csv')
+    sa = pd.read_csv('groundwater/static/original.csv')
     sa = sa[sa['SO4[mg/l]'] != 'depleted']
     sa = sa[sa['NO3[mg/l]'] != 'depleted']
     sa_final = sa.drop(['Site No.', 'Site Unit', 'Compound', 'Plume state', 'Chem. Group', 'Country',
