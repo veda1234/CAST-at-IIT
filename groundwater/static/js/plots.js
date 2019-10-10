@@ -15,7 +15,7 @@ function plot () {
     	console.log(data);
 
       // if data is in correct format, plot it.
-    	Plotly.newPlot('scatterplot', data,data['layout'],{responsive:true});
+    	Plotly.newPlot('plot', data,data['layout'],{responsive:true});
     });
 }
 

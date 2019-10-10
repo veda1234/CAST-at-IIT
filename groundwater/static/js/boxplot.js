@@ -10,7 +10,7 @@ $('#third_cat').on('change',function(){
         },
         dataType:"json",
         success: function (data) {
-            Plotly.newPlot('boxplot', data, data['layout'],{responsive:true} );
+            Plotly.newPlot('plot', data, data['layout'],{responsive:true} );
         }
     });
 })
