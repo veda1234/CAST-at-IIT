@@ -129,19 +129,16 @@
                 <a href="{{ url_for('database')}}">
                     <div class="box">
                         <img src="/static/one.jpg" width="250"/>
-                        <div class="centered"><h2>SITE<br>DATABASE<br> and <br>MODEL INPUT</h2></div>
                     </div>
                 </a>
                 <a href="{{ url_for('analyticalModel')}}">
                     <div class="box">
                         <img src="/static/analyt.jpg" width="250"/>
-                        <div class="centered"><h2>ANALYTICAL<br>MODELS</h2></div>
                     </div>
                 </a>
                 <a href="{{ url_for('empiricalModel')}}">
                     <div class="box">
                         <img src="/static/semi.jpg" width="250"/>
-                        <div class="centered"><h2>EMPIRICAL<br>MODELS</h2></div>
                     </div>
                 </a>
             </div>
@@ -149,16 +146,13 @@
                 <a href="{{ url_for('numericalModel')}}">
                 <div class="box">
                     <img src="/static/num.jpg" width="250"/>
-                    <div class="centered"><h2>NUMERICAL<br>MODELS</h2></div>
                 </div>
                 </a>
                 <div class="box">
                     <img src="/static/two.jpg" width="250"/>
-                    <div class="centered"><h2>OPTIMIZATION<br>TOOL</h2></div>
                 </div>
                 <div class="box">
                     <img src="/static/three.jpg" width="250"/>
-                    <div class="centered"><h2>WATER<br> QUALITY <br>INDEX</h2></div>
                 </div>
             </div>
             <br><br>
@@ -195,7 +189,7 @@
                     <ol>
                         <li>Start with the Database Toolbox</li>
                         <li>Follow then to Analytical model Toolbox or Empirical model toolbox, and then</li>
-                        <li>Numerical model toolbox (not implemented yet).</li>
+                        <li>Numerical model toolbox (under development).</li>
                     </ol>
                     <p>The Decision Toolbox (not implemented yet) and the Other toolboxes do not require any work flow.
                         The User’s guide (not complete) will contain details on how to use the toolbox correctly with
@@ -205,8 +199,8 @@
                     <h2><a id="NOTE_16"></a>NOTE:</h2>
                     <p>The authors of this site and the organizations supporting the development are not in
                         any way responsible for the results obtained using the tools provide in the site.</p><br>
-                    <a href="#" class="tm-button tm-button-normal">User's guide </a>
-                    <a href="#" class="tm-button tm-button-normal">Complete Documentation</a>
+                    <a href="{{ url_for('user_guide') }}" class="tm-button-doc tm-button-normal">User's guide </a>
+                    <a href="{{ url_for('complete_documentation') }}" class="tm-button-doc tm-button-normal">Complete Documentation</a>
                 </div>
             </div>
 

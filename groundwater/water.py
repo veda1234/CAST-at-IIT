@@ -50,6 +50,16 @@ def about_plume():
     return render_template('IndexDocumentation/contaminant_plume.html')
 
 
+@app.route('/user_guide', methods=['GET', 'POST'])
+def user_guide():
+    return render_template('IndexDocumentation/users_guide.html')
+
+
+@app.route('/complete_documentation', methods=['GET', 'POST'])
+def complete_documentation():
+    return render_template('IndexDocumentation/complete_documentation.html')
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:

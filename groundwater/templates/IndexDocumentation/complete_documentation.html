@@ -1,0 +1,68 @@
+{% extends 'baseLayoutDocumentation.html' %}
+{% block title %}Complete Documentation{% endblock %}
+{% block content %}
+<h1 id="development-of-contaminated-plumes">Complete Documentation</h1>
+<p>This software has been created by using a micro-framework based on Python, called Flask and for the proper management of the dependencies in this project, a virtual environment has been created. The front end has been designed using HTML, CSS and bootstrap, the back-end is being handled by the open source management system, MySQL and the integration of the front-end and back-end is done through Python(3.6.8). The interactivity of all the components have been achieved by JavaScript.</p>
+<p><img src="static\complete_doc.png" alt="Framework for the site" style="zoom:80%;" /></p><br>
+<div>
+<strong>The structuring of the project is as follows :</strong>
+<ol>
+    <li>Virtual environment folder</li>
+    <li>Main folder (groundwater)</li>
+    <li>Three executable files</li>
+    <li>run.py(main file)</li>
+</ol>
+<p><img src="static\complete_doc_1.png" alt="Framework for the site" style="zoom:80%;"/></p><br>
+</div>
+<div>
+<strong>The main folder(groundwater) has a structuring as follows :</strong>
+<ol>
+    <li>Templates (consists of HTML codes)</li>
+    <li>Static (consists of CSS, images, JavaScript codes etc.)</li>
+    <li>Numerical model package(consists of code for the numerical model)</li>
+    <li>Other python files(consists of routes, initialisation and integration codes for the web platform)</li>
+</ol>
+<p><img src="static\complete_doc_2.png" alt="Framework for the site" style="zoom:80%;" /></p>
+</div>
+<div>
+<p>The structuring of the folders have been done according to the flask application structure. This ensures that all files are stored separately, according to their functions.</p>
+<strong>Some of the important libraries used in this project are :</strong>
+<ol>
+    <li>Pandas – for accessing the database in order to manipulate and read the data.</li>
+    <li>Plotly, Matplotlib, Seaborn – for generating graphs, these libraries are used for visualisation of the data.</li>
+    <li>SQLAlchemy – for abstraction of the database.</li>
+    <li>Sklearn, scikit-learn – for data mining and machine learning.</li>
+    <li>SciPy – scientific library for python.</li>
+    <li>FloPy – a package to create, run, and post-process MODFLOW based models.</li>
+</ol>
+</div>
+<p>Please note : The original database mentioned in this documentation refers to the database that is already existing in the software.</p>
+<p>For using this software, first make sure that you have an account. To make an account, you can click on register and enter the necessary details that are required. You can then login with your registered email id and password.</p>
+<p>There are 6 boxes that get displayed on the ‘Groundwater quality toolboxes’. The site database model, analytical model and empirical model are complete and can be used. The numerical model is still under development, however, it can be used. The optimization tool would be completed in the future.</p>
+
+<strong>You can begin by using the sites database model :</strong>
+<ol>
+    <li>Create your own database by either entering all parameters manually or upload a .csv file (you can download a sample csv file for checking the format to ensure that your file can be successfully uploaded).</li>
+    <li>You can also continue without creating your own database.</li>
+    <li>Navigate to ‘Analysis Visualisation’ and then, to ‘All plots’ to see the visualisations available.</li>
+    <li>Starting with the bar graph, you would be able to see that your database(in case you have created one) would be merged with the original database(already provided in the site).</li>
+    <li>Similarly, you can navigate to the boxplot, scatterplot and histogram to visualize different types of density curves and fits for important parameters like ‘Plume length’.</li>
+    <li>The statistical analysis page provides you with an overall description of the original database by giving the quartiles, counts, etc.</li>
+    <li>After using this toolbox, you can move onto the analytical and empirical models.</li>
+</ol>
+<strong>For the analytical and empirical model :</strong>
+<ol>
+    <li>Read the documentation for the equation that you want to use.</li>
+    <li>The single computation mode for each equation will require only one entry for each parameter.</li>
+    <li>The outputs for the single computation mode will be the ‘Maximum plume length’ and a graph displaying the plume lengths in the original database and one that is calculated with the user inputs.</li>
+    <li>The interactions for the graph can also be done via sliders, which have the most sensitive parameters.</li>
+    <li>By changing the values in the sliders, the displayed value for plume length as well as the entry on the graph changes, making it easier for the user to visualise their results.</li>
+    <li>The multiple computation mode for each equation allows multiple entries to be entered into the database. A separate table is created for each equation in the database.</li>
+    <li>For using this mode, the entries for the equation can be entered manually or can be uploaded via a .csv file.</li>
+    <li>For this purpose, please check the sample files for each parameter, to ensure that your file gets uploaded successfully.</li>
+    <li>After creating your own database, your entries are shown along with the original database on a graph, this helps to visualize and compare all entries.</li>
+    <li>If you wish to see only some of the entries from the original database, you can choose them from the dropdown.</li>
+</ol>
+<p>For the numerical model, enter all the values of the parameters to get a ‘Maximum plume length’ according to the values entered.</p>
+
+{% endblock %}

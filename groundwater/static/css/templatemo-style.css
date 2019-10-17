@@ -167,6 +167,22 @@ body {
 	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
+.tm-button-doc,
+.tm-button-doc:focus {
+  background-color: #936;
+	border: none;
+	border-radius: 0;
+	color: #fff;
+	display: inline-block;
+	-webkit-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.tm-button-doc:hover,
+.tm-button-doc.active {
+	background-color: #7B2852;
+	color: #EAD53D;
+	text-decoration: none;
+}
 
 .tm-button:hover,
 .tm-button.active {
