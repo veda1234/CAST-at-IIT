@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def numerical_model(Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk):
+def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, hk):
     # Domain
 
     Lx = Lx
@@ -21,7 +21,7 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2,
 
     prsity = prsity
     al = al
-    trpt = trpt
+    av = av
     Gamma = Gamma
     Cd = Cd
     Ca = Ca
@@ -61,14 +61,14 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2,
     icbund[:, 0, :] = -1  # first row
     icbund[:, 0, 0] = -1  # first cell
     sconc = np.zeros((nlay, nrow, ncol), dtype=np.float32)
-    sconc[:, :, 0] = (Gamma * Cd) + 2 * abs(Ca)
-    sconc[:, :, -1] = Ca + 2 * abs(Ca)
-    sconc[:, 0, :] = Ca + 2 * abs(Ca)
-    sconc[:, 0, 0] = 2 * abs(Ca)
+    sconc[:, :, 0] = (Gamma * Cd) + (2 * Ca)
+    sconc[:, :, -1] = Ca
+    sconc[:, 0, :] = Ca
+    sconc[:, 0, 0] = 2 *Ca
 
     btn = flopy.mt3d.Mt3dBtn(mt, icbund=icbund, prsity=prsity, sconc=sconc)
     adv = flopy.mt3d.Mt3dAdv(mt, mixelm=-1)
-    dsp = flopy.mt3d.Mt3dDsp(mt, al=al, trpt=trpt)
+    dsp = flopy.mt3d.Mt3dDsp(mt, al=al, trpt=av/al)
     gcg = flopy.mt3d.Mt3dGcg(mt)
     ssm = flopy.mt3d.Mt3dSsm(mt)
 
@@ -79,11 +79,12 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2,
     conc = ucnobj.get_alldata()
     mvt = mt.load_mas('MT3D001.MAS')
 
+    C0=2*Ca
     plt.figure(figsize=(10, 10))
     mm = flopy.plot.map.PlotMapView(model=mf)
     mm.plot_grid(color='.5', alpha=0.2)
     conc = conc[0, :, :]
-    cs = mm.contour_array(conc, levels=[16.], colors=['k'])
+    cs = mm.contour_array(conc, levels=[C0], colors=['k'])
     mm.plot_ibound()
     plt.clabel(cs)
     plt.xlabel('DISTANCE ALONG X-AXIS, IN METERS')

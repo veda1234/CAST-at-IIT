@@ -492,6 +492,7 @@ figure.effect-bubba:hover p {
 	figure.effect-bubba h2 { padding-top: 5%; }
 }
 
+
 @media (min-width: 800px) {
 	.tm-welcome-boxes-container {
 		flex-direction: row;
@@ -537,12 +538,9 @@ figure.effect-bubba:hover p {
 		margin: 1.1666%;
 	}
 
-	/* Firefox hack 
-   	https://css-tricks.com/snippets/css/css-hacks-targeting-firefox/
-	*/
 	@-moz-document url-prefix() { 
 	  	.grid figure {
-			margin: 10px 1.1666%;	/* padding-bottom in % not working in FF, so use em instead. */
+			margin: 10px 1.1666%;
 		}
 	}
 }
@@ -568,8 +566,7 @@ figure.effect-bubba:hover p {
 	}
 
 	.tm-box-pad { padding: 30px; }
-	.tm-welcome-boxes-container { width: 688px; } /* Need to hard code width for IE */
-
+	.tm-welcome-boxes-container { width: 688px; }
 	.grid figure {
 		width: 325px;
 		height: 325px;
@@ -592,7 +589,7 @@ figure.effect-bubba:hover p {
 	.tm-welcome-text { padding: 30px; }
 	.tm-section-title { margin-bottom: 20px; }
 	.tm-box-pad { padding: 45px; }
-	.tm-welcome-boxes-container { width: 780px; } /* Need to hard code width for IE */
+	.tm-welcome-boxes-container { width: 780px; }
 
 	.grid figure { 
 		width: 254px;
@@ -605,7 +602,7 @@ figure.effect-bubba:hover p {
 	figure.effect-bubba h2 { padding-top: 5%; }
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1000px) {
 	.container-fluid { max-width: 1400px; }
 	.tm-sidebar {		
 		height: 600px;
@@ -628,7 +625,25 @@ figure.effect-bubba:hover p {
 
 	figure.effect-bubba h2 { padding-top: 5%; }
 	.grid figure figcaption { padding: 2em;	}
+
+	.box {
+        float: left;
+  width: 33.33%;
+  position:relative;
+  color:white;
+    }
 }
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  /* Styles */
+  .box {
+        float: left;
+        width: 33.33%;
+        position:relative;
+        color:white;
+        margin-right:70px;
+    }
+}
+
 
 .tm-main-nav { 
 	display: -webkit-box; 

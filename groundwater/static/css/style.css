@@ -72,12 +72,12 @@ body{
   width:100%;
 }
 
-@media(max-width:568px){
-  .navbar-navNew{display:none}
-}
-
+/*@media(max-width:568px){
+  .navbar-navNew{
+*/
 @media(min-width:568px){
-  /*.open-slide{display:none}*/
+  /*.opendisplay:none}
+}-slide{display:none}*/
 }
 
 .dropdownNew {
