@@ -1,6 +1,9 @@
+import json
 import flopy
 import matplotlib.pyplot as plt
 import numpy as np
+import plotly
+import plotly.graph_objs as go
 
 
 def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, hk):
@@ -30,9 +33,14 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, h
     hk = hk
     perlen = 6000
 
+    # Exe
+
+    exe_name_mf = 'mf2005'
+    exe_name_mt = 'mt3dms'
+
     # Flow Calculation
 
-    mf = flopy.modflow.Modflow(modelname='T02_mf')
+    mf = flopy.modflow.Modflow(modelname='T02_mf', exe_name=exe_name_mf)
     dis = flopy.modflow.ModflowDis(mf, nlay=nlay, nrow=nrow, ncol=ncol, delr=delx, delc=dely, top=0, botm=[0 - delv],
                                    perlen=perlen)
 
@@ -53,22 +61,21 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, h
 
     # Transport Calculation
 
-    mt = flopy.mt3d.Mt3dms(modelname='T02_mt', exe_name='mt3dms5b', modflowmodel=mf)
+    mt = flopy.mt3d.Mt3dms(modelname='T02_mt', exe_name=exe_name_mt, modflowmodel=mf)
 
     icbund = np.ones((nlay, nrow, ncol), dtype=np.int32)
+    icbund[:, 0, :] = -1  # first row
     icbund[:, :, 0] = -1  # first column
     icbund[:, :, -1] = -1  # last column
-    icbund[:, 0, :] = -1  # first row
-    icbund[:, 0, 0] = -1  # first cell
+
     sconc = np.zeros((nlay, nrow, ncol), dtype=np.float32)
+    sconc[:, 0, :] = Ca
     sconc[:, :, 0] = (Gamma * Cd) + (2 * Ca)
     sconc[:, :, -1] = Ca
-    sconc[:, 0, :] = Ca
-    sconc[:, 0, 0] = 2 *Ca
 
     btn = flopy.mt3d.Mt3dBtn(mt, icbund=icbund, prsity=prsity, sconc=sconc)
     adv = flopy.mt3d.Mt3dAdv(mt, mixelm=-1)
-    dsp = flopy.mt3d.Mt3dDsp(mt, al=al, trpt=av/al)
+    dsp = flopy.mt3d.Mt3dDsp(mt, al=al, trpt=av / al)
     gcg = flopy.mt3d.Mt3dGcg(mt)
     ssm = flopy.mt3d.Mt3dSsm(mt)
 
@@ -79,17 +86,19 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, h
     conc = ucnobj.get_alldata()
     mvt = mt.load_mas('MT3D001.MAS')
 
-    C0=2*Ca
-    plt.figure(figsize=(10, 10))
-    mm = flopy.plot.map.PlotMapView(model=mf)
+    C0 = 2 * Ca
+    plt.figure(figsize=(11, 5))
+    ax = plt.axes()
+    mm = flopy.plot.map.PlotMapView(ax=ax, model=mf)
     mm.plot_grid(color='.5', alpha=0.2)
-    conc = conc[0, :, :]
+    conc = conc[0, 0, :]
     cs = mm.contour_array(conc, levels=[C0], colors=['k'])
     mm.plot_ibound()
     plt.clabel(cs)
-    plt.xlabel('DISTANCE ALONG X-AXIS, IN METERS')
-    plt.ylabel('DISTANCE ALONG Y-AXIS, IN METERS')
-    plt.title('ULTIMATE')
+    plt.xlabel('Distance Lx [m]')
+    plt.ylabel('Aquifer Thickness [m]')
+    plt.title('Contaminant Plume')
+    plt.savefig("groundwater/static/Numerical")
 
     # Plume length
 

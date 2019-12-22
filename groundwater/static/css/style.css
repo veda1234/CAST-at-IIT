@@ -3,7 +3,9 @@ body{
   background-color:#f4f4f4;
   overflow-x:hidden;
 }
-
+.pull-right {
+    float: right!important;
+}
 .navbarNew{
   background-color:#993366;
   overflow:hidden;

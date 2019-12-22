@@ -6,7 +6,8 @@ from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'd168651a2aa242e14428a991c42164ef'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/groundwater'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Groundwater@2019@localhost/groundwater'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///groundwater.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)

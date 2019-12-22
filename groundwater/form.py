@@ -149,8 +149,8 @@ class NumericalForm(FlaskForm):
                                              NumberRange(max=2500,
                                                          message='Please enter a value lesser than or equal to 2500')])
     Ly = FloatField('Height[m]', validators=[InputRequired(), less_than])
-    ncol = IntegerField('No. of columns', validators=[InputRequired()])
-    nrow = IntegerField('No. of rows', validators=[InputRequired()])
+    ncol = IntegerField('Number of columns', validators=[InputRequired()])
+    nrow = IntegerField('Number of rows', validators=[InputRequired()])
     # Parameters
     prsity = FloatField('Porosity',
                         validators=[InputRequired(),

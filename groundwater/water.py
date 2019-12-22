@@ -2,6 +2,8 @@ import json
 import math
 import os
 import glob
+import plotly
+import plotly.graph_objs as go
 
 import matplotlib
 import pandas as pd
@@ -720,6 +722,7 @@ def BirlaEtAlModelMultiple():
 @login_required
 def numericalModel():
     form = NumericalForm()
+    bool=False
     if form.validate_on_submit():
         Lx = form.Lx.data
         Ly = form.Ly.data
@@ -740,6 +743,7 @@ def numericalModel():
             try:
                 lMax = numerical_model(Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk)
                 lMax = "%.2f" % lMax
+                bool=True
                 string = 'Maximum Plume Length(LMax): ' + str(lMax)
                 flash(string, 'success')
             except Exception as e:
@@ -752,4 +756,4 @@ def numericalModel():
             os.remove("MT3D001.MAS")
             os.remove("MT3D.CNF")
             os.remove("mt3d_link.ftl")
-    return render_template('NumericalModel/numericalModel.html', form=form)
+    return render_template('NumericalModel/numericalNew.html', form=form, bool=bool)
