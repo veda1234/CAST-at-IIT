@@ -2,11 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from groundwater.config import Config
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'd168651a2aa242e14428a991c42164ef'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Groundwater@2019@localhost/groundwater'
+app.config.from_object(Config)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///groundwater.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
