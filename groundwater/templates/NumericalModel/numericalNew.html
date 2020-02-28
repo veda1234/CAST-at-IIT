@@ -300,13 +300,7 @@ color: #444444;
             {%endwith%}
             </div>
     {% if bool %}
-        <img class="NO-CACHE" src="static/Numerical.png">
+	{{ plot_url|safe }}
     {% endif %}
 </form>
-{% endblock %}
-{% block script %}
- $(document).ready(function ()
-    {
-        $('.NO-CACHE').attr('src',function () { return $(this).attr('src') + "?a=" + Math.random() });
-    });
 {% endblock %}

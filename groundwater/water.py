@@ -68,7 +68,8 @@ def register():
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(
+            form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, password=hashed_password,
                     organisation=form.organisation.data, country=form.organisation.data)
         db.session.add(user)
@@ -181,7 +182,8 @@ def change_scatterplot():
     table_data = user_database(current_user.id)
     index = assign_parameter_value(parameters)
     # end
-    graphJSON = create_scatterplot(scatterplot_fits, parameters, table_data, index)
+    graphJSON = create_scatterplot(
+        scatterplot_fits, parameters, table_data, index)
     return graphJSON
 
 
@@ -192,7 +194,8 @@ def change_feature1():
     parameter = data.get('parameter', 'default')
     table_data = user_database(current_user.id)
     index = assign_parameter_value(parameter)
-    graphJSON = create_histogram(histogramFeature, table_data, index, parameter)
+    graphJSON = create_histogram(
+        histogramFeature, table_data, index, parameter)
     return graphJSON
 
 
@@ -276,7 +279,8 @@ def liedlModelSingle():
     a = 3.5
     ca = 8
     cd = 5
-    lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * math.log(((a * cd + ca) / ca) * (4 / math.pi))
+    lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * \
+        math.log(((a * cd + ca) / ca) * (4 / math.pi))
     lMax = "%.2f" % lMax
     year_histogram = create_singlePlot(lMax)
     return render_template('AnalyticalModel/liedlModelSingle.html', year_histogram=year_histogram)
@@ -289,7 +293,8 @@ def random_name():
     a = float(request.form['Stoichiometric'])
     ca = float(request.form['Acceptor'])
     cd = float(request.form['Donor'])
-    lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * math.log(((a * cd + ca) / ca) * (4 / math.pi))
+    lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * \
+        math.log(((a * cd + ca) / ca) * (4 / math.pi))
     lMax = "%.2f" % lMax
     year_histogram = create_singlePlot(lMax)
     return jsonify({'Result': lMax, 'data': render_template('graphSingleResult.html', year_histogram=year_histogram)})
@@ -305,7 +310,8 @@ def liedlModelMultiple():
         a = form.Stoichiometry_coefficient.data
         ca = form.Contaminant_Concentration.data
         cd = form.Reactant_Concentration.data
-        lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * math.log(((a * cd + ca) / ca) * (4 / math.pi))
+        lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * \
+            math.log(((a * cd + ca) / ca) * (4 / math.pi))
         lMax = "%.2f" % lMax
         liedl = Liedl(Aquifer_thickness=m, Transverse_Dispersivity=tv, Stoichiometry_coefficient=a,
                       Contaminant_Concentration=ca,
@@ -554,7 +560,8 @@ def liedl3DModelMultiple():
         except Exception as e:
             pass
     elif request.method == 'POST':
-        allowed_file(check_file_for_liedl3d_equation, current_user, Liedl3D, db)
+        allowed_file(check_file_for_liedl3d_equation,
+                     current_user, Liedl3D, db)
         return redirect('/liedl3DModelMultiple')
     para = create_Liedl3DMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
@@ -634,7 +641,8 @@ def MaierAndGrathwohlModelMultiple():
         allowed_file(check_file_for_maier_and_grathwohl_equation, current_user,
                      MaierGrathwohl, db)
         return redirect('/MaierAndGrathwohlModelMultiple')
-    para = create_MaierAndGrathwohlPlotMultiple(df['Site No.'].tolist(), table_data)
+    para = create_MaierAndGrathwohlPlotMultiple(
+        df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']
     return render_template('EmpiricalModel/MaierAndGrathwohlModelMultiple.html', plot=para, siteData=zip(y, x),
@@ -722,7 +730,7 @@ def BirlaEtAlModelMultiple():
 @login_required
 def numericalModel():
     form = NumericalForm()
-    bool=False
+    bool = False
     if form.validate_on_submit():
         Lx = form.Lx.data
         Ly = form.Ly.data
@@ -738,22 +746,18 @@ def numericalModel():
         h2 = form.h2.data
         hk = form.hk.data
         if not (h1 > h2):
-            flash('Value of head inlet should be greater than value of head outlet', 'danger')
+            flash(
+                'Value of head inlet should be greater than value of head outlet', 'danger')
         else:
             try:
-                lMax = numerical_model(Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk)
+                id = str(current_user.id)
+                lMax, plot_url = numerical_model(
+                    Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk, id)
                 lMax = "%.2f" % lMax
-                bool=True
+                bool = True
                 string = 'Maximum Plume Length(LMax): ' + str(lMax)
                 flash(string, 'success')
+                return render_template('NumericalModel/numericalNew.html', form=form, bool=bool, plot_url=plot_url)
             except Exception as e:
                 flash('No contour levels were found within the data range', 'danger')
-            # clear memory
-            for filename in glob.glob("T02_mf*"):
-                os.remove(filename)
-            for filename in glob.glob("T02_mt*"):
-                os.remove(filename)
-            os.remove("MT3D001.MAS")
-            os.remove("MT3D.CNF")
-            os.remove("mt3d_link.ftl")
     return render_template('NumericalModel/numericalNew.html', form=form, bool=bool)

@@ -5,7 +5,7 @@ import pandas as pd
 import seaborn as sns
 
 plt.style.use('seaborn-ticks')
-matplotlib.use('TkAgg')
+#matplotlib.use('TkAgg')
 
 
 def dispersivity_graphs():

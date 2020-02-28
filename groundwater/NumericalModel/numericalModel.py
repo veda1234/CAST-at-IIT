@@ -1,12 +1,19 @@
-import json
 import flopy
 import matplotlib.pyplot as plt
 import numpy as np
-import plotly
-import plotly.graph_objs as go
+import glob
+import io
+import os
+import base64
+import shutil
+from shutil import copy
 
 
-def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, hk):
+def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, hk, id):
+    parent_dir = '/home/vedaanti/Water'
+    path = os.path.join(parent_dir, id)
+    os.mkdir(path)
+    os.chdir(path)
     # Domain
 
     Lx = Lx
@@ -32,15 +39,13 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, h
     h2 = h2
     hk = hk
     perlen = 6000
-
     # Exe
-
-    exe_name_mf = 'mf2005'
-    exe_name_mt = 'mt3dms'
+    exe_name_mf = copy('/home/vedaanti/Water/mf2005', path)
+    exe_name_mt = copy('/home/vedaanti/Water/mt3dms', path)
 
     # Flow Calculation
-
-    mf = flopy.modflow.Modflow(modelname='T02_mf', exe_name=exe_name_mf)
+    t0_mf = 'T02_mf' + id
+    mf = flopy.modflow.Modflow(modelname=t0_mf, exe_name=exe_name_mf)
     dis = flopy.modflow.ModflowDis(mf, nlay=nlay, nrow=nrow, ncol=ncol, delr=delx, delc=dely, top=0, botm=[0 - delv],
                                    perlen=perlen)
 
@@ -60,8 +65,9 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, h
     mf.run_model(silent=True)
 
     # Transport Calculation
-
-    mt = flopy.mt3d.Mt3dms(modelname='T02_mt', exe_name=exe_name_mt, modflowmodel=mf)
+    t0_mt = 'T02_mt' + id
+    mt = flopy.mt3d.Mt3dms(
+        modelname=t0_mt, exe_name=exe_name_mt, modflowmodel=mf)
 
     icbund = np.ones((nlay, nrow, ncol), dtype=np.int32)
     icbund[:, 0, :] = -1  # first row
@@ -98,14 +104,25 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, h
     plt.xlabel('Distance Lx [m]')
     plt.ylabel('Aquifer Thickness [m]')
     plt.title('Contaminant Plume')
-    plt.savefig("groundwater/static/Numerical")
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+
+    plot_url = base64.b64encode(img.getvalue()).decode()
 
     # Plume length
-
     p1 = cs.collections[0].get_paths()[0]
     coor_p1 = p1.vertices
     plume_length = np.max(coor_p1[:, 0])
 
     # clear up all memory
     ucnobj.close()
-    return plume_length
+   # for filename in glob.glob('/home/vedaanti/Water/'+t0_mt+'*'):
+    #   os.remove(filename)
+   # for filename in glob.glob('/home/vedaanti/Water/'+t0_mf+'*'):
+    #    os.remove(filename)
+  # os.remove('/home/vedaanti/Water/MT3D.CNF')
+  # os.remove('/home/vedaanti/Water/mt3d_link.ftl')
+    os.chdir("..")
+    shutil.rmtree(path)
+    return plume_length, '<img src="data:image/png;base64,{}">'.format(plot_url)
