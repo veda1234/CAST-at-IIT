@@ -146,23 +146,52 @@ def less_than(FlaskForm, field):
 class NumericalForm(FlaskForm):
     # Domain
     Lx = FloatField('Length[m]', validators=[InputRequired(),
-                                             NumberRange(max=2500,
-                                                         message='Please enter a value lesser than or equal to 2500')])
+                                             NumberRange(min=2500, max=5000,
+                                                         message='Please enter a value in '
+                                                                 'the range of 2500-5000(inclusive)')])
     Ly = FloatField('Height[m]', validators=[InputRequired(), less_than])
-    ncol = IntegerField('Number of columns', validators=[InputRequired()])
-    nrow = IntegerField('Number of rows', validators=[InputRequired()])
+    ncol = IntegerField('Number of columns', validators=[InputRequired(), NumberRange(min=2, max=250,
+                                                                                      message='Please enter a value '
+                                                                                              'in the range '
+                                                                                              'of 2-250(inclusive)')])
+    nrow = IntegerField('Number of rows', validators=[InputRequired(), NumberRange(min=2, max=250,
+                                                                                   message='Please enter a '
+                                                                                           'value in the range'
+                                                                                           ' of 2-250(inclusive)')])
     # Parameters
     prsity = FloatField('Porosity',
                         validators=[InputRequired(),
                                     NumberRange(
                                         min=0, max=1,
-                                        message='Please enter a value in the range of 0-1(inclusive))')])
-    al = FloatField('Longitudinal Dispersivity[m]', validators=[InputRequired()])
-    trpt = FloatField('Transverse Vertical Dispersivity[m]', validators=[InputRequired()])
-    Gamma = FloatField('Stoichiometric Ratio', validators=[InputRequired()])
+                                        message='Please enter a value in the range of 0-1(inclusive)')])
+    al = FloatField('Longitudinal Dispersivity[m]', validators=[InputRequired(),
+                                                                NumberRange(
+                                                                    min=1, max=10,
+                                                                    message='Please enter a '
+                                                                            'value in the range of 1-10(inclusive)')
+                                                                ])
+    trpt = FloatField('Transverse Vertical Dispersivity[m]', validators=[InputRequired(),
+                                                                         NumberRange(
+                                                                             min=0.01, max=0.1,
+                                                                             message='Please enter a '
+                                                                                     'value in the range '
+                                                                                     'of 0.01-0.1(inclusive)')
+                                                                         ])
+    Gamma = FloatField('Stoichiometric Ratio', validators=[InputRequired(),
+                                                           NumberRange(
+                                                               min=1,
+                                                               message='Please enter a '
+                                                                       'more than or equal to 1')
+                                                           ])
+
     Cd = FloatField('Contaminant Concentration[mg/l]', validators=[InputRequired()])
     Ca = FloatField('Partner Reactant Concentration[mg/l]', validators=[InputRequired()])
     h1 = FloatField('Head inlet[m]', validators=[InputRequired()])
     h2 = FloatField('Head outlet[m]', validators=[InputRequired()])
-    hk = FloatField('Conductivity[m/d]', validators=[InputRequired()])
+    hk = FloatField('Conductivity[m/d]', validators=[InputRequired(),
+                                                     NumberRange(
+                                                         min=8.64*pow(10, -5), max=864,
+                                                         message='Please enter a '
+                                                                 'value in the range of 8.64E-5 - 864(inclusive)')
+                                                     ])
     submit = SubmitField('Run')

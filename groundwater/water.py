@@ -1,17 +1,16 @@
 import json
 import math
 import os
-import glob
-import plotly
-import plotly.graph_objs as go
+import shutil
 
 import matplotlib
 import pandas as pd
 from flask import jsonify
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
 
-from groundwater import app, db, bcrypt
+from groundwater import app, db, bcrypt, mail
 from groundwater.NumericalModel.numericalModel import numerical_model
 from groundwater.assignParameterValue import assign_parameter_value
 from groundwater.dataStorage import *
@@ -21,7 +20,7 @@ from groundwater.file_checkers import allowed_file, check_file_for_liedl_equatio
     check_file_for_ham_equation, check_file_for_liedl3d_equation, check_file_for_maier_and_grathwohl_equation, \
     check_file_for_birla_equation, check_file_for_database
 from groundwater.form import RegistrationForm, LoginForm, UpdateAccountForm, LiedlForm, ChuForm, HamForm, Liedl3DForm, \
-    BirlaForm, MaierGrathwohlForm, UserDatabaseForm, NumericalForm
+    BirlaForm, MaierGrathwohlForm, UserDatabaseForm, NumericalForm, RequestResetForm, ResetPasswordForm
 from groundwater.liedl3D import create_liedl3DPlot
 from groundwater.models import User, Liedl, Chu, Ham, Liedl3D, Birla, MaierGrathwohl, User_Database
 from groundwater.parameters import *
@@ -60,6 +59,11 @@ def user_guide():
 @app.route('/complete_documentation', methods=['GET', 'POST'])
 def complete_documentation():
     return render_template('IndexDocumentation/complete_documentation.html')
+
+
+@app.route('/credits', methods=['GET', 'POST'])
+def credits():
+    return render_template('IndexDocumentation/credits.html')
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -108,6 +112,50 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request',
+                  sender='noreply@demo.com',
+                  recipients=[user.email])
+    msg.body = f'''To reset your password, visit the following link:
+{url_for('reset_token', token=token, _external=True)}
+If you did not make this request then simply ignore this email and no changes will be made.
+'''
+    mail.send(msg)
+
+
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password.', 'info')
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', title='Reset Password', form=form)
+
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash('Your password has been updated! You are now able to log in', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title='Reset Password', form=form)
+
 
 
 @app.route("/account", methods=['GET', 'POST'])
@@ -745,6 +793,9 @@ def numericalModel():
         h1 = form.h1.data
         h2 = form.h2.data
         hk = form.hk.data
+        id = str(current_user.id)
+        parent_dir = '/home/vedaanti/Water'
+        path = os.path.join(parent_dir, id)
         if not (h1 > h2):
             flash(
                 'Value of head inlet should be greater than value of head outlet', 'danger')
@@ -752,7 +803,7 @@ def numericalModel():
             try:
                 id = str(current_user.id)
                 lMax, plot_url = numerical_model(
-                    Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk, id)
+                    Lx, Ly, ncol, nrow, prsity, al, trpt, Gamma, Cd, Ca, h1, h2, hk, id, path)
                 lMax = "%.2f" % lMax
                 bool = True
                 string = 'Maximum Plume Length(LMax): ' + str(lMax)
@@ -760,4 +811,6 @@ def numericalModel():
                 return render_template('NumericalModel/numericalNew.html', form=form, bool=bool, plot_url=plot_url)
             except Exception as e:
                 flash('No contour levels were found within the data range', 'danger')
+        os.chdir("..")
+        shutil.rmtree(path)
     return render_template('NumericalModel/numericalNew.html', form=form, bool=bool)

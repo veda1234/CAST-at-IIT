@@ -9,9 +9,7 @@ import shutil
 from shutil import copy
 
 
-def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, hk, id):
-    parent_dir = '/home/vedaanti/Water'
-    path = os.path.join(parent_dir, id)
+def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, hk, id, path):
     os.mkdir(path)
     os.chdir(path)
     # Domain
@@ -124,5 +122,4 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, h
   # os.remove('/home/vedaanti/Water/MT3D.CNF')
   # os.remove('/home/vedaanti/Water/mt3d_link.ftl')
     os.chdir("..")
-    shutil.rmtree(path)
     return plume_length, '<img src="data:image/png;base64,{}">'.format(plot_url)
