@@ -1,7 +1,42 @@
 {% extends 'baseLayoutDocumentation.html' %}
 {% block title %}Complete Documentation{% endblock %}
 {% block content %}
-<h1 id="development-of-contaminated-plumes">Complete Documentation</h1>
+<h2 id="contamination-assessment-and-site-management-tool-cast"><strong>C</strong>ontamination <strong>A</strong>ssessment and <strong>S</strong>ite management <strong>T</strong>ool (<strong>CAST</strong>)</h2>
+<p><strong>CAST</strong> provides an online interface for the assessment of contaminated sites, specially for BTEX-type contaminations. The specific highlight is a web-based interface for calculating steady-state plume length <span class="math inline">\(L_{max}\)</span> using <a href="http://tiny.cc/kon6jz">MODFLOW</a> and <a href="http://tiny.cc/6pn6jz">MT3D-MS</a>.</p>
+<p><strong>NOTE:</strong> <em><strong>Authors and organizations credited on this page or on the above-mentioned website are NOT responsible for any results or output obtained from using the website or the codes provided here</strong></em></p>
+<p>The website currently can already be used for:</p>
+<ol type="1">
+<li><strong>Statistical Analysis of Contaminated sites:</strong>
+<ul>
+<li>Large contaminated site database</li>
+<li>Statistical measures and visualizations of important site quantities</li>
+</ul>
+<br>
+</li>
+<li><strong>Analytical Models for steady-state plume length <span class="math inline">\((L_{max})\)</span> estimations:</strong>
+<ul>
+<li>2D Vertical Model (Liedl et al., 2005)</li>
+<li>2D Horizontal Model (Ham et al. 2005, Chu et al., 2005)</li>
+<li>3D Model (Liedl et al., 2011)</li>
+<li>More to be added …,</li>
+</ul><br></li>
+<li><strong>Empirical Models for <span class="math inline">\(L_{max}\)</span> estimations:</strong>
+<ul>
+<li>2D Vertical (Maier and Grathwohl, 2005)</li>
+<li>2D Vertical with richarge (Birla et al. 2019 - in revision)</li>
+<li>More to be added …,</li>
+</ul><br></li>
+<li><strong>Numerical Models for plume length estimations:</strong>
+<ul>
+<li>Web-interface for MODFLOW/MT3DMS</li>
+<li>Single reactant reactive transport model based on Yadav et al., 2013.</li>
+<li>More in the development …,</li>
+</ul><br></li>
+<li><strong>Decision model for selection of model for site-assessment</strong>
+<ul>
+<li>Based on Yadav et al., 2020 (in revision)</li>
+</ul></li>
+</ol>
 <p>This software has been created by using a micro-framework based on Python, called Flask and for the proper management of the dependencies in this project, a virtual environment has been created. The front end has been designed using HTML, CSS and bootstrap, the back-end is being handled by the open source management system, MySQL and the integration of the front-end and back-end is done through Python(3.6.8). The interactivity of all the components have been achieved by JavaScript.</p>
 <p><img src="static\complete_doc.png" alt="Framework for the site" style="zoom:80%;" /></p><br>
 <div>
@@ -9,7 +44,7 @@
 <ol>
     <li>Virtual environment folder</li>
     <li>Main folder (groundwater)</li>
-    <li>Three executable files</li>
+    <li>Two Bash files</li>
     <li>run.py(main file)</li>
 </ol>
 <p><img src="static\complete_doc_1.png" alt="Framework for the site" style="zoom:80%;"/></p><br>
@@ -38,7 +73,7 @@
 </div>
 <p>Please note : The original database mentioned in this documentation refers to the database that is already existing in the software.</p>
 <p>For using this software, first make sure that you have an account. To make an account, you can click on register and enter the necessary details that are required. You can then login with your registered email id and password.</p>
-<p>There are 6 boxes that get displayed on the ‘Groundwater quality toolboxes’. The site database model, analytical model and empirical model are complete and can be used. The numerical model is still under development, however, it can be used. The optimization tool would be completed in the future.</p>
+<p>There are 6 boxes that get displayed on the ‘Groundwater quality toolboxes’. The site database model, analytical model and empirical model are complete and can be used. The optimization tool would be completed in the future.</p>
 
 <strong>You can begin by using the sites database model :</strong>
 <ol>
