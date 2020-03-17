@@ -10,7 +10,7 @@
 
 **CAST** provides an online application for the assessment of contaminated sites, specially for BTEX-type contaminations. The specific highlight is a web-based application for calculating steady-state plume length $L_{max}$ using [MODFLOW](http://tiny.cc/kon6jz) and [MT3D-MS](http://tiny.cc/6pn6jz).
 
-**The site can be assessed from www.cast.iitd.ac.in (change name as required)**
+**The site can be assessed from www.cast.iitd.ac.in **
 
 **NOTE:**
 _Authors and organizations credited on this page or on the above-mentioned website are NOT responsible for any results or output obtained from using the website or the codes provided here_
@@ -86,7 +86,7 @@ The following organizations has been supporting the development:
 7. M.Sc. Shamsuddin Daulat <sup>2, </sup><sup>**</sup>
 8. Mr. Aditya Kumar(from NIT Trichy, India.)
 
-<sup>+</sup>_Technical lead, full stack development and deployment(at IITD),_
+<sup>+</sup>_Technical lead, full stack development and deployment,_
 <sup>++</sup>_Concept development and coding,_
 <sup>+*</sup>_Numerical model interface and code development,_
 <sup>**</sup>_Decison model and code development_
