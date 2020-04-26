@@ -30,12 +30,31 @@ def create_scatterplot(feature, parameter, table_data, index):
     for i in range(len(index_of_nan) - 1, -1, -1):
         element = y[index_of_nan[i]]
         y.remove(element)
-
     merged_list = [x for x in merged_list if str(x) != 'nan']
+
+    index_of_none_merged_list = []
+    for i in range(len(merged_list)):
+        if merged_list[i] is None:
+            index_of_none_merged_list += [i]
+    index_of_none_y = []
+    for i in range(len(y)):
+        if y[i] is None:
+            index_of_none_y += [i]
+
+    for i in range(len(index_of_none_merged_list) - 1, -1, -1):
+        element = y[index_of_none_merged_list[i]]
+        y.remove(element)
+
+    for i in range(len(index_of_none_y) - 1, -1, -1):
+        element = merged_list[index_of_none_y[i]]
+        merged_list.remove(element)
+
+    merged_list = [x for x in merged_list if x is not None]
+    y = [x for x in y if x is not None]
 
     if feature == 'Exponential':
         # exponential
-        popt, pcov = curve_fit(exponenial_func, merged_list, y, p0=(1, 1e-6, 1))
+        popt, pcov = curve_fit(exponenial_func, merged_list, y, p0=(1, 1e-6, 1), maxfev=5000)
         xx = np.linspace(1, len(merged_list), len(merged_list))
         yy = exponenial_func(xx, *popt)
 
