@@ -157,7 +157,6 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
-'''
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
@@ -179,7 +178,6 @@ def account():
 @login_required
 def database():
     table_data = user_database(current_user.id)
-
     def check_null(data):
         if data == -1:
             data = None
@@ -208,9 +206,16 @@ def database():
             db.session.add(user_entry)
             db.session.commit()
             return redirect('/database')
-    elif request.method == 'POST':
-        allowed_file(check_file_for_database, current_user, User_Database, db)
-        return redirect('/database')
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_database, current_user, User_Database, db)
+            return redirect('/database')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            User_Database.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/database')
     return render_template('DatabaseManagement/database.html', table_data=table_data,
                            column_names=Parameters.User_data_columns)
 
@@ -364,8 +369,7 @@ def liedlModelMultiple():
         a = form.Stoichiometry_coefficient.data
         ca = form.Contaminant_Concentration.data
         cd = form.Reactant_Concentration.data
-        lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * \
-            math.log(((a * cd + ca) / ca) * (4 / math.pi))
+        lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * math.log(((a * cd + ca) / ca) * (4 / math.pi))
         lMax = "%.2f" % lMax
         liedl = Liedl(Aquifer_thickness=m, Transverse_Dispersivity=tv, Stoichiometry_coefficient=a,
                       Contaminant_Concentration=ca,
@@ -386,8 +390,15 @@ def liedlModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_liedl_equation, current_user, Liedl, db)
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_liedl_equation, current_user, Liedl, db)
+        return redirect('/liedlModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Liedl.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
         return redirect('/liedlModelMultiple')
     para = create_liedlPlotMultiple(df['Site No.'].tolist(), table_data)
     x = df['Site Unit']
@@ -460,9 +471,16 @@ def chuEtAlModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_chu_equation, current_user, Chu, db)
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_chu_equation, current_user, Chu, db)
         return redirect(url_for('chuEtAlModelMultiple'))
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Chu.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect(url_for('chuEtAlModelMultiple'))
     para = create_chuEtAlPlotMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']
@@ -529,9 +547,16 @@ def hamModelMultiple():
             return para
         except Exception as e:
             print(e)
-    elif request.method == 'POST':
-        allowed_file(check_file_for_ham_equation, current_user, Ham, db)
-        return redirect('/hamModelMultiple')
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_ham_equation, current_user, Ham, db)
+            return redirect('/hamModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Ham.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/hamModelMultiple')
     para = create_HamPlotMultiple(df['Site No.'].tolist(), table_data)
     x = df['Site Unit']
     y = df['Site No.']
@@ -613,10 +638,16 @@ def liedl3DModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_liedl3d_equation,
-                     current_user, Liedl3D, db)
-        return redirect('/liedl3DModelMultiple')
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_liedl3d_equation, current_user, Liedl3D, db)
+            return redirect('/liedl3DModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Liedl3D.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/liedl3DModelMultiple')
     para = create_Liedl3DMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']
@@ -691,12 +722,18 @@ def MaierAndGrathwohlModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_maier_and_grathwohl_equation, current_user,
-                     MaierGrathwohl, db)
-        return redirect('/MaierAndGrathwohlModelMultiple')
-    para = create_MaierAndGrathwohlPlotMultiple(
-        df['Site No.'].tolist(), table_data)
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_maier_and_grathwohl_equation, current_user,
+                         MaierGrathwohl, db)
+            return redirect('/MaierAndGrathwohlModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            MaierGrathwohl.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/MaierAndGrathwohlModelMultiple')
+    para = create_MaierAndGrathwohlPlotMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']
     return render_template('EmpiricalModel/MaierAndGrathwohlModelMultiple.html', plot=para, siteData=zip(y, x),
@@ -770,9 +807,16 @@ def BirlaEtAlModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_birla_equation, current_user, Birla, db)
-        return redirect('/BirlaEtAlModelMultiple')
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_birla_equation, current_user, Birla, db)
+            return redirect('/BirlaEtAlModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Birla.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/BirlaEtAlModelMultiple')
     para = create_BirlaEtAlPlotMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']
