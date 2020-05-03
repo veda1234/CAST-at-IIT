@@ -844,7 +844,7 @@ def numericalModel():
         h2 = form.h2.data
         hk = form.hk.data
         id = str(current_user.id)
-        parent_dir = '/home/vedaanti/Water'
+        parent_dir = 'your_directory'
         path = os.path.join(parent_dir, id)
         if not (h1 > h2):
             flash(
