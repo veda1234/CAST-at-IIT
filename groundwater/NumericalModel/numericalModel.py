@@ -38,8 +38,8 @@ def numerical_model(Lx, Ly, ncol, nrow, prsity, al, av, Gamma, Cd, Ca, h1, h2, h
     hk = hk
     perlen = 6000
     # Exe
-    exe_name_mf = copy('/home/vedaanti/Water/mf2005', path)
-    exe_name_mt = copy('/home/vedaanti/Water/mt3dms', path)
+    exe_name_mf = copy('your_directory/mf2005', path)
+    exe_name_mt = copy('your_directory/mt3dms', path)
 
     # Flow Calculation
     t0_mf = 'T02_mf' + id
