@@ -149,13 +149,13 @@ def reset_token(token):
         return redirect(url_for('reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(
+            form.password.data).decode('utf-8')
         user.password = hashed_password
         db.session.commit()
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
-
 
 
 @app.route("/account", methods=['GET', 'POST'])
@@ -808,6 +808,7 @@ def numericalModel():
                 bool = True
                 string = 'Maximum Plume Length(LMax): ' + str(lMax)
                 flash(string, 'success')
+                shutil.rmtree(path)
                 return render_template('NumericalModel/numericalNew.html', form=form, bool=bool, plot_url=plot_url)
             except Exception as e:
                 flash('No contour levels were found within the data range', 'danger')
