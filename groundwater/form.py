@@ -1,7 +1,8 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
+from math import e
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, IntegerField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired, NumberRange
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired, NumberRange, Regexp, email_validator
 
 from groundwater.models import User
 
@@ -59,8 +60,8 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('That email is taken. Please choose another one')
-                
-                
+
+
 class RequestResetForm(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
@@ -71,88 +72,110 @@ class RequestResetForm(FlaskForm):
         if user is None:
             raise ValidationError('There is no account with that email. You must register first.')
 
-            
+
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset Password')
 
+#
+# def less_than(FlaskForm, field):
+#     if field.data
+#         raise ValidationError('Field must be less than 5')
+
 
 class UserDatabaseForm(FlaskForm):
-    Site_Unit = StringField('Site Unit', validators=[DataRequired()])
-    Compound = StringField('Compound', validators=[DataRequired()])
-    Aquifer_thickness = FloatField('Aquifer Thickness', validators=[DataRequired()])
-    Plume_length = FloatField('Plume Length', validators=[DataRequired()])
-    Plume_Width = FloatField('Plume Width', validators=[DataRequired()])
-    Hydraulic_conductivity = FloatField('Hydraulic Conductivity', validators=[DataRequired()])
-    Electron_Donor = FloatField('Electron Donor', validators=[DataRequired()])
-    O2 = FloatField('O2', validators=[DataRequired()])
-    NO3 = FloatField('NO3', validators=[DataRequired()])
-    SO4 = FloatField('SO4', validators=[DataRequired()])
-    Fe = FloatField('Fe', validators=[DataRequired()])
-    Plume_state = StringField('Plume State', validators=[DataRequired()])
-    Chem_Group = StringField('Chemical Group', validators=[DataRequired()])
-    Country = StringField('Country', validators=[DataRequired()])
-    Literature_Source = StringField('Literature Source', validators=[DataRequired()])
+    Site_Unit = StringField('Site Unit', validators=[InputRequired()])
+    Compound = StringField('Compound', validators=[InputRequired()])
+    Aquifer_thickness = FloatField('Aquifer Thickness', validators=[InputRequired()])
+    Plume_length = FloatField('Plume Length', validators=[InputRequired()])
+    Plume_Width = FloatField('Plume Width', validators=[InputRequired()])
+    Hydraulic_conductivity = FloatField('Hydraulic Conductivity', validators=[InputRequired()])
+    Electron_Donor = FloatField('Electron Donor', validators=[InputRequired()])
+    O2 = FloatField('O2', validators=[InputRequired()])
+    NO3 = FloatField('NO3', validators=[InputRequired()])
+    SO4 = FloatField('SO4', validators=[InputRequired()])
+    Fe = FloatField('Fe', validators=[InputRequired()])
+    Plume_state = StringField('Plume State', validators=[InputRequired()])
+    Chem_Group = StringField('Chemical Group', validators=[InputRequired()])
+    Country = StringField('Country', validators=[InputRequired()])
+    Literature_Source = StringField('Literature Source', validators=[InputRequired()])
     submit = SubmitField('Add Data')
 
 
 class LiedlForm(FlaskForm):
     Aquifer_thickness = FloatField('Aquifer Thickness', validators=[DataRequired()])
-    Transverse_Dispersivity = FloatField('Transverse Dispersivity', validators=[DataRequired()])
-    Stoichiometry_coefficient = FloatField('Stoichiometry coefficient', validators=[DataRequired()])
-    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[DataRequired()])
-    Reactant_Concentration = FloatField('Reactant Concentration', validators=[DataRequired()])
+    Transverse_Dispersivity = FloatField('Transverse Dispersivity', validators=[InputRequired()])
+    Stoichiometry_coefficient = FloatField('Stoichiometry coefficient', validators=[InputRequired()])
+    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[InputRequired()])
+    Reactant_Concentration = FloatField('Reactant Concentration', validators=[InputRequired()])
     submit = SubmitField('Generate Graph')
 
 
 class ChuForm(FlaskForm):
-    Width = FloatField('Width', validators=[DataRequired()])
-    Transverse_Horizontal_Dispersivity = FloatField('Transverse Horizontal Dispersivity', validators=[DataRequired()])
-    Reaction_Stoichiometric_Ratio = FloatField('Reaction Stoichiometric Ratio', validators=[DataRequired()])
-    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[DataRequired()])
-    Reactant_Concentration = FloatField('Reactant Concentration', validators=[DataRequired()])
+    Width = FloatField('Width', validators=[InputRequired()])
+    Transverse_Horizontal_Dispersivity = FloatField('Transverse Horizontal Dispersivity', validators=[InputRequired()])
+    Reaction_Stoichiometric_Ratio = FloatField('Reaction Stoichiometric Ratio', validators=[InputRequired()])
+    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[InputRequired()])
+    Reactant_Concentration = FloatField('Reactant Concentration', validators=[InputRequired()])
     Biological_Factor = FloatField('Biological Factor', validators=[InputRequired("Please enter a valid value")])
     submit = SubmitField('Generate Graph')
 
+class BioForm(FlaskForm):
+    Threshold_Concentration = FloatField('Threshold Concentration', validators=[InputRequired()])
+    Time = FloatField('Time', validators=[InputRequired()])
+    Top_Source_Location = FloatField('Source Thickness', validators=[InputRequired()])
+    Input_Concentration = FloatField('Source Concentration', validators=[InputRequired()])
+    Source_Width = FloatField('Source Width', validators=[InputRequired()])
+    Average_Linear_Groundwater_Velocity = FloatField('Average Linear Groundwater Velocity', validators=[InputRequired("Please enter a valid value")])
+    Longitudinal_Dispersivity = FloatField('Longitudinal Dispersivity', validators=[InputRequired()])
+    Horizontal_Transverse_Dispersivity = FloatField('Horizontal Transverse Dispersivity', validators=[InputRequired()])
+    Vertical_Transverse_Dispersivity = FloatField('Vertical Transverse Dispersivity', validators=[InputRequired()])
+    Effective_Diffusion_Coefficient = FloatField('Effective Diffusion Coefficient', validators=[InputRequired()])
+    R = FloatField('Retardation Factor', validators=[InputRequired()])
+    Ga = FloatField('Source Decay Coefficient', validators=[InputRequired()])
+    La = FloatField('Effective first-order Decay Coefficient', validators=[InputRequired()])
+    M = FloatField('Number of Gauss points', validators=[InputRequired()])
+    submit = SubmitField('Generate Graph')
 
 class HamForm(FlaskForm):
-    Width = FloatField('Width', validators=[DataRequired()])
-    Horizontal_Transverse_Dispersivity = FloatField('Horizontal Transverse Dispersivity', validators=[DataRequired()])
-    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[DataRequired()])
-    Reactant_Concentration = FloatField('Reactant Concentration', validators=[DataRequired()])
+    Width = FloatField('Width', validators=[InputRequired()])
+    Horizontal_Transverse_Dispersivity = FloatField('Horizontal Transverse Dispersivity', validators=[InputRequired()])
+    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[InputRequired()])
+    Reactant_Concentration = FloatField('Reactant Concentration', validators=[InputRequired()])
+    Gamma = FloatField('Gamma', validators=[InputRequired()])
     submit = SubmitField('Generate Graph')
 
 
 class Liedl3DForm(FlaskForm):
-    Source_Thickness = FloatField('Source Thickness', validators=[DataRequired()])
-    Vertical_Transverse_Dispersivity = FloatField('Vertical Transverse Dispersivity', validators=[DataRequired()])
-    Source_Width = FloatField('Source Width', validators=[DataRequired()])
-    Horizontal_Transverse_Dispersivity = FloatField('Horizontal Transverse Dispersivity', validators=[DataRequired()])
-    Stoichiometric_Ratio = FloatField('Stoichiometric Ratio', validators=[DataRequired()])
-    Partner_Reactant_Concentration = FloatField('Partner Reactant Concentration', validators=[DataRequired()])
-    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[DataRequired()])
-    Threshold_Contaminant_Concentration = FloatField('Threshold Contaminant Concentration', validators=[DataRequired()])
+    Source_Thickness = FloatField('Source Thickness', validators=[InputRequired()])
+    Vertical_Transverse_Dispersivity = FloatField('Vertical Transverse Dispersivity', validators=[InputRequired()])
+    Source_Width = FloatField('Source Width', validators=[InputRequired()])
+    Horizontal_Transverse_Dispersivity = FloatField('Horizontal Transverse Dispersivity', validators=[InputRequired()])
+    Stoichiometric_Ratio = FloatField('Stoichiometric Ratio', validators=[InputRequired()])
+    Partner_Reactant_Concentration = FloatField('Partner Reactant Concentration', validators=[InputRequired()])
+    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[InputRequired()])
+    Threshold_Contaminant_Concentration = FloatField('Threshold Contaminant Concentration', validators=[InputRequired()])
     submit = SubmitField('Generate Graph')
 
 
 class BirlaForm(FlaskForm):
-    Aquifer_thickness = FloatField('Aquifer Thickness', validators=[DataRequired()])
-    Vertical_Transverse_Dispersivity = FloatField('Vertical Transverse Dispersivity', validators=[DataRequired()])
-    Stoichiometry_coefficient = FloatField('Stoichiometry coefficient', validators=[DataRequired()])
-    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[DataRequired()])
-    Reactant_Concentration = FloatField('Reactant Concentration', validators=[DataRequired()])
-    Recharge_Rate = FloatField('Recharge Rate', validators=[DataRequired()])
+    Aquifer_thickness = FloatField('Aquifer Thickness', validators=[InputRequired()])
+    Vertical_Transverse_Dispersivity = FloatField('Vertical Transverse Dispersivity', validators=[InputRequired()])
+    Stoichiometry_coefficient = FloatField('Stoichiometry coefficient', validators=[InputRequired()])
+    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[InputRequired()])
+    Reactant_Concentration = FloatField('Reactant Concentration', validators=[InputRequired()])
+    Recharge_Rate = FloatField('Recharge Rate', validators=[InputRequired()])
     submit = SubmitField('Generate Graph')
 
 
 class MaierGrathwohlForm(FlaskForm):
-    Aquifer_thickness = FloatField('Aquifer Thickness', validators=[DataRequired()])
-    Vertical_Transverse_Dispersivity = FloatField('Vertical Transverse Dispersivity', validators=[DataRequired()])
-    Stoichiometry_coefficient = FloatField('Stoichiometry coefficient', validators=[DataRequired()])
-    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[DataRequired()])
-    Reactant_Concentration = FloatField('Reactant Concentration', validators=[DataRequired()])
+    Aquifer_thickness = FloatField('Aquifer Thickness', validators=[InputRequired()])
+    Vertical_Transverse_Dispersivity = FloatField('Vertical Transverse Dispersivity', validators=[InputRequired()])
+    Stoichiometry_coefficient = FloatField('Stoichiometry coefficient', validators=[InputRequired()])
+    Contaminant_Concentration = FloatField('Contaminant Concentration', validators=[InputRequired()])
+    Reactant_Concentration = FloatField('Reactant Concentration', validators=[InputRequired()])
     submit = SubmitField('Generate Graph')
 
 

@@ -4,6 +4,7 @@ import pandas as pd
 from flask import flash, redirect, request
 from werkzeug.utils import secure_filename
 from groundwater.liedl3D import create_liedl3DPlot
+from groundwater.bioScreenFormula import bio
 
 from groundwater.parameters import Parameters
 
@@ -27,7 +28,7 @@ def allowed_file(check_file, current_user, current_table, db):
             flash(f'Successfully uploaded the file {filename}', category='success')
         else:
             flash(f'Problem parsing the parameters.\n'
-                  f'Please check that parameter heading and values for parameters are matching'
+                  f'Please check that the heading and ranges/values for the parameters are matching'
                   f' the permitted codes.\n'
                   f'Kindly refer to the sample csv file for details.',
                   category='danger')
@@ -40,6 +41,15 @@ def allowed_extension(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in Parameters.Extensions.ALLOWED_EXTENSIONS
 
 
+def convert_and_clean_inputs_database(plume, parameter_name):
+    parameter = plume[parameter_name].values.tolist()
+    parameter = [x for x in parameter if str(x) != 'nan']
+    for idx, item in enumerate(parameter):
+        if item == -1:
+            parameter[idx] = None
+    return parameter
+
+
 def convert_and_clean_inputs(plume, parameter_name):
     parameter = plume[parameter_name].values.tolist()
     parameter = [x for x in parameter if str(x) != 'nan']
@@ -48,21 +58,21 @@ def convert_and_clean_inputs(plume, parameter_name):
 
 def check_file_for_database(plume, current_user, User_Database, db):
     try:
-        lMax = convert_and_clean_inputs(plume, 'Plume length[m]')
-        site = convert_and_clean_inputs(plume, 'Site Unit')
-        compound = convert_and_clean_inputs(plume, 'Compound')
-        atv = convert_and_clean_inputs(plume, 'Aquifer thickness[m]')
-        w = convert_and_clean_inputs(plume, 'Plume Width[m]')
-        hc = convert_and_clean_inputs(plume, 'Hydraulic conductivity[10-3 [m/s]]')
-        ed = convert_and_clean_inputs(plume, 'Electron Donor[mg/l]')
-        o2 = convert_and_clean_inputs(plume, 'Electron Acceptors : O2[mg/l]')
-        no3 = convert_and_clean_inputs(plume, 'NO3[mg/l]')
-        so4 = convert_and_clean_inputs(plume, 'SO4[mg/l]')
-        fe = convert_and_clean_inputs(plume, 'Fe(II)[mg/l]')
-        ps = convert_and_clean_inputs(plume, 'Plume state')
-        cg = convert_and_clean_inputs(plume, 'Chem. Group')
-        cy = convert_and_clean_inputs(plume, 'Country')
-        ls = convert_and_clean_inputs(plume, 'Literature Source')
+        lMax = convert_and_clean_inputs_database(plume, 'Plume length[m]')
+        site = convert_and_clean_inputs_database(plume, 'Site Unit')
+        compound = convert_and_clean_inputs_database(plume, 'Compound')
+        atv = convert_and_clean_inputs_database(plume, 'Aquifer thickness[m]')
+        w = convert_and_clean_inputs_database(plume, 'Plume Width[m]')
+        hc = convert_and_clean_inputs_database(plume, 'Hydraulic conductivity[10-3 [m/s]]')
+        ed = convert_and_clean_inputs_database(plume, 'Electron Donor[mg/l]')
+        o2 = convert_and_clean_inputs_database(plume, 'Electron Acceptors : O2[mg/l]')
+        no3 = convert_and_clean_inputs_database(plume, 'NO3[mg/l]')
+        so4 = convert_and_clean_inputs_database(plume, 'SO4[mg/l]')
+        fe = convert_and_clean_inputs_database(plume, 'Fe(II)[mg/l]')
+        ps = convert_and_clean_inputs_database(plume, 'Plume state')
+        cg = convert_and_clean_inputs_database(plume, 'Chem. Group')
+        cy = convert_and_clean_inputs_database(plume, 'Country')
+        ls = convert_and_clean_inputs_database(plume, 'Literature Source')
         plume_length = len(lMax)
         for i in range(plume_length):
             user_db = User_Database(
@@ -100,6 +110,7 @@ def check_file_for_liedl_equation(plume, current_user, Liedl, db):
             db.session.add(liedl)
         db.session.commit()
     except Exception as e:
+        print(e)
         return False
     return True
 
@@ -124,6 +135,40 @@ def check_file_for_chu_equation(plume, current_user, Chu, db):
             db.session.add(chu)
         db.session.commit()
     except Exception as e:
+        print(e)
+        return False
+    return True
+
+
+def check_file_for_bio_equation(plume, current_user, Bio, db):
+    try:
+        Cthres = convert_and_clean_inputs(plume, 'Threshold Concentration')
+        time = convert_and_clean_inputs(plume, 'Time')
+        H = convert_and_clean_inputs(plume, 'Source Thickness')
+        c0 = convert_and_clean_inputs(plume, 'Source Concentration')
+        W = convert_and_clean_inputs(plume, 'Source Width')
+        v = convert_and_clean_inputs(plume, 'Average Linear Groundwater Velocity')
+        ax = convert_and_clean_inputs(plume, 'Longitudinal Dispersivity')
+        ay = convert_and_clean_inputs(plume, 'Horizontal Transverse Dispersivity')
+        az = convert_and_clean_inputs(plume, 'Vertical Transverse Dispersivity')
+        Df = convert_and_clean_inputs(plume, 'Effective Diffusion Coefficient')
+        R = convert_and_clean_inputs(plume, 'Retardation Factor')
+        gamma = convert_and_clean_inputs(plume, 'Source Decay Coefficient')
+        lambda_eff = convert_and_clean_inputs(plume, 'Effective first-order Decay Coefficient')
+        numberOfGaussPoints = convert_and_clean_inputs(plume, 'Number of Gauss points')
+        plume_length = len(W)
+        for i in range(plume_length):
+            lMax = bio(Cthres[i],time[i],H[i],c0[i],W[i],v[i],ax[i],ay[i],az[i],Df[i],R[i],gamma[i],lambda_eff[i],
+            numberOfGaussPoints[i])
+            bio_screen = Bio(Threshold_Concentration=Cthres[i], Time=time[i], Top_Source_Location=H[i],
+                  Input_Concentration=c0[i], Source_Width=W[i], Average_Linear_Groundwater_Velocity=v[i],
+                  Longitudinal_Dispersivity=ax[i], Horizontal_Transverse_Dispersivity=ay[i],
+                  Vertical_Transverse_Dispersivity=az[i], Effective_Diffusion_Coefficient=Df[i], R=R[i], Ga=gamma[i], La=lambda_eff[i],
+                  M=numberOfGaussPoints[i],Model_Plume_Length=lMax, bio=current_user)
+            db.session.add(bio_screen)
+        db.session.commit()
+    except Exception as e:
+        print(e)
         return False
     return True
 
@@ -133,6 +178,7 @@ def check_file_for_ham_equation(plume, current_user, Ham, db):
         m = convert_and_clean_inputs(plume, 'Discharge')
         tv = convert_and_clean_inputs(plume, 'Horizontal Transverse Dispersivity')
         ca = convert_and_clean_inputs(plume, 'Contaminant Concentration')
+        a = convert_and_clean_inputs(plume, 'Gamma')
         cd = convert_and_clean_inputs(plume, 'Reactant Concentration')
         plume_length = len(m)
         for i in range(plume_length):
@@ -140,12 +186,14 @@ def check_file_for_ham_equation(plume, current_user, Ham, db):
                 Width=m[i], Horizontal_Transverse_Dispersivity=tv[i],
                 Contaminant_Concentration=ca[i],
                 Reactant_Concentration=cd[i],
-                Model_Plume_Length=((m[i] * m[i]) / (4 * math.pi * tv[i])) * ((cd[i] / ca[i]) ** 2),
+                Gamma=a[i],
+                Model_Plume_Length=((m[i] * m[i]) / (4 * math.pi * tv[i])) * (((a[i]*cd[i]) / ca[i]) ** 2),
                 ham=current_user
             )
             db.session.add(ham)
         db.session.commit()
     except Exception as e:
+        print(e)
         return False
     return True
 
@@ -174,6 +222,7 @@ def check_file_for_liedl3d_equation(plume, current_user, Liedl3D, db):
             db.session.add(liedl3d)
         db.session.commit()
     except Exception as e:
+        print(e)
         return False
     return True
 
@@ -198,6 +247,7 @@ def check_file_for_maier_and_grathwohl_equation(plume, current_user, MaierGrathw
             db.session.add(maiergrathwohl)
         db.session.commit()
     except Exception as e:
+        print(e)
         return False
     return True
 
@@ -225,5 +275,6 @@ def check_file_for_birla_equation(plume, current_user, Birla, db):
             db.session.add(birla)
         db.session.commit()
     except Exception as e:
+        print(e)
         return False
     return True
