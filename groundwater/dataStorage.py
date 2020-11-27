@@ -1,4 +1,4 @@
-from groundwater.models import Liedl, Chu, Ham, Liedl3D, Birla, MaierGrathwohl, User_Database
+from groundwater.models import Liedl, Chu, Ham, Liedl3D, Birla, MaierGrathwohl, User_Database,Bio
 
 
 def user_database(user_id):

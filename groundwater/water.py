@@ -20,15 +20,15 @@ from groundwater.databasePlots import create_bargraph, create_histogram, create_
 from groundwater.dispersivity_graphs import dispersivity_graphs
 from groundwater.file_checkers import allowed_file, check_file_for_liedl_equation, check_file_for_chu_equation, \
     check_file_for_ham_equation, check_file_for_liedl3d_equation, check_file_for_maier_and_grathwohl_equation, \
-    check_file_for_birla_equation, check_file_for_database
+    check_file_for_birla_equation, check_file_for_bio_equation,check_file_for_database
 from groundwater.form import RegistrationForm, LoginForm, UpdateAccountForm, LiedlForm, ChuForm, HamForm, Liedl3DForm, \
-    BirlaForm, MaierGrathwohlForm, UserDatabaseForm, NumericalForm, RequestResetForm, ResetPasswordForm
+    BirlaForm, MaierGrathwohlForm, UserDatabaseForm, NumericalForm,BioForm, RequestResetForm, ResetPasswordForm
 from groundwater.liedl3D import create_liedl3DPlot
 from groundwater.models import User, Liedl, Chu, Ham, Liedl3D, Birla, MaierGrathwohl, User_Database, Bio
 from groundwater.parameters import Parameters
 from groundwater.scatterplot import create_scatterplot
 from groundwater.scatterplotAnalyticalModel import create_liedlPlotMultiple, create_chuEtAlPlotMultiple, \
-    create_HamPlotMultiple, create_Liedl3DMultiple
+    create_HamPlotMultiple, create_Liedl3DMultiple,create_BioPlotMultiple
 from groundwater.scatterplotSingleMode import create_singlePlot
 from groundwater.scatterplotsEmpiricalModel import create_MaierAndGrathwohlPlotMultiple, create_BirlaEtAlPlotMultiple
 
@@ -994,6 +994,7 @@ def numericalModel():
                 bool = True
                 string = 'Maximum Plume Length(LMax): ' + str(lMax)
                 flash(string, 'success')
+                shutil.rmtree(path)
                 return render_template('NumericalModel/numericalNew.html', form=form, bool=bool, plot_url=plot_url)
             except Exception as e:
                 flash('No contour levels were found within the data range', 'danger')

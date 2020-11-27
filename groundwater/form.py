@@ -2,7 +2,7 @@ from flask_login import current_user
 from flask_wtf import FlaskForm
 from math import e
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, IntegerField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired, NumberRange, Regexp, email_validator
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired, NumberRange
 
 from groundwater.models import User
 
