@@ -179,35 +179,47 @@ def account():
 @login_required
 def database():
     table_data = user_database(current_user.id)
-    form = UserDatabaseForm()
-    if form.validate_on_submit():
-        Aquifer_thickness = form.Aquifer_thickness.data
-        Plume_length = form.Plume_length.data
-        Plume_Width = form.Plume_Width.data
-        Hydraulic_conductivity = form.Hydraulic_conductivity.data
-        Electron_Donor = form.Electron_Donor.data
-        O2 = form.O2.data
-        NO3 = form.NO3.data
-        SO4 = form.SO4.data
-        Fe = form.Fe.data
-        Plume_state = form.Plume_state.data
-        Chem_Group = form.Chem_Group.data
-        Country = form.Country.data
-        Literature_Source = form.Literature_Source.data
-        user_entry = User_Database(Site_Unit=form.Site_Unit.data, Aquifer_thickness=Aquifer_thickness,
-                                   Plume_length=Plume_length, Plume_Width=Plume_Width,
-                                   Hydraulic_conductivity=Hydraulic_conductivity, Electron_Donor=Electron_Donor,
-                                   O2=O2, NO3=NO3, SO4=SO4, Fe=Fe, Plume_state=Plume_state,
-                                   Chem_Group=Chem_Group, Country=Country, Literature_Source=Literature_Source,
-                                   user_database=current_user, Compound=form.Compound.data)
-        db.session.add(user_entry)
-        db.session.commit()
-        return redirect('/database')
-    elif request.method == 'POST':
-        allowed_file(check_file_for_database, current_user, User_Database, db)
-        return redirect('/database')
-    return render_template('DatabaseManagement/database.html', form=form, table_data=table_data,
+    def check_null(data):
+        if data == -1:
+            data = None
+        return data
+    if "open" in request.form:
+        if request.method == 'POST':
+            Aquifer_thickness = check_null(float(request.form["aqui"]))
+            Plume_length = check_null(float(request.form["length"]))
+            Plume_Width = check_null(float(request.form["width"]))
+            Hydraulic_conductivity = check_null(float(request.form["conduct"]))
+            Electron_Donor = check_null(float(request.form["donor"]))
+            O2 = check_null(float(request.form["o2"]))
+            NO3 = check_null(float(request.form["no3"]))
+            SO4 = check_null(float(request.form["so4"]))
+            Fe = check_null(float(request.form["fe"]))
+            Plume_state = check_null((request.form["state"]))
+            Chem_Group = check_null((request.form["chem"]))
+            Country = check_null((request.form["country"]))
+            Literature_Source = check_null((request.form["source"]))
+            user_entry = User_Database(Site_Unit=request.form["name"], Aquifer_thickness=Aquifer_thickness,
+                                       Plume_length=Plume_length, Plume_Width=Plume_Width,
+                                       Hydraulic_conductivity=Hydraulic_conductivity, Electron_Donor=Electron_Donor,
+                                       O2=O2, NO3=NO3, SO4=SO4, Fe=Fe, Plume_state=Plume_state,
+                                       Chem_Group=Chem_Group, Country=Country, Literature_Source=Literature_Source,
+                                       user_database=current_user, Compound=request.form["compound"])
+            db.session.add(user_entry)
+            db.session.commit()
+            return redirect('/database')
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_database, current_user, User_Database, db)
+            return redirect('/database')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            User_Database.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/database')
+    return render_template('DatabaseManagement/database.html', table_data=table_data,
                            column_names=Parameters.User_data_columns)
+
 
 
 @app.route('/dispersivityData', methods=['POST', 'GET'])
@@ -358,8 +370,7 @@ def liedlModelMultiple():
         a = form.Stoichiometry_coefficient.data
         ca = form.Contaminant_Concentration.data
         cd = form.Reactant_Concentration.data
-        lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * \
-            math.log(((a * cd + ca) / ca) * (4 / math.pi))
+        lMax = ((4 * m * m) / (math.pi * math.pi * tv)) * math.log(((a * cd + ca) / ca) * (4 / math.pi))
         lMax = "%.2f" % lMax
         liedl = Liedl(Aquifer_thickness=m, Transverse_Dispersivity=tv, Stoichiometry_coefficient=a,
                       Contaminant_Concentration=ca,
@@ -380,8 +391,15 @@ def liedlModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_liedl_equation, current_user, Liedl, db)
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_liedl_equation, current_user, Liedl, db)
+        return redirect('/liedlModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Liedl.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
         return redirect('/liedlModelMultiple')
     para = create_liedlPlotMultiple(df['Site No.'].tolist(), table_data)
     x = df['Site Unit']
@@ -454,9 +472,16 @@ def chuEtAlModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_chu_equation, current_user, Chu, db)
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_chu_equation, current_user, Chu, db)
         return redirect(url_for('chuEtAlModelMultiple'))
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Chu.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect(url_for('chuEtAlModelMultiple'))
     para = create_chuEtAlPlotMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']
@@ -523,9 +548,16 @@ def hamModelMultiple():
             return para
         except Exception as e:
             print(e)
-    elif request.method == 'POST':
-        allowed_file(check_file_for_ham_equation, current_user, Ham, db)
-        return redirect('/hamModelMultiple')
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_ham_equation, current_user, Ham, db)
+            return redirect('/hamModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Ham.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/hamModelMultiple')
     para = create_HamPlotMultiple(df['Site No.'].tolist(), table_data)
     x = df['Site Unit']
     y = df['Site No.']
@@ -607,10 +639,16 @@ def liedl3DModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_liedl3d_equation,
-                     current_user, Liedl3D, db)
-        return redirect('/liedl3DModelMultiple')
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_liedl3d_equation, current_user, Liedl3D, db)
+            return redirect('/liedl3DModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Liedl3D.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/liedl3DModelMultiple')
     para = create_Liedl3DMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']
@@ -685,12 +723,18 @@ def MaierAndGrathwohlModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_maier_and_grathwohl_equation, current_user,
-                     MaierGrathwohl, db)
-        return redirect('/MaierAndGrathwohlModelMultiple')
-    para = create_MaierAndGrathwohlPlotMultiple(
-        df['Site No.'].tolist(), table_data)
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_maier_and_grathwohl_equation, current_user,
+                         MaierGrathwohl, db)
+            return redirect('/MaierAndGrathwohlModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            MaierGrathwohl.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/MaierAndGrathwohlModelMultiple')
+    para = create_MaierAndGrathwohlPlotMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']
     return render_template('EmpiricalModel/MaierAndGrathwohlModelMultiple.html', plot=para, siteData=zip(y, x),
@@ -764,9 +808,16 @@ def BirlaEtAlModelMultiple():
             return para
         except Exception as e:
             pass
-    elif request.method == 'POST':
-        allowed_file(check_file_for_birla_equation, current_user, Birla, db)
-        return redirect('/BirlaEtAlModelMultiple')
+    elif "upload" in request.form:
+        if request.method == 'POST':
+            allowed_file(check_file_for_birla_equation, current_user, Birla, db)
+            return redirect('/BirlaEtAlModelMultiple')
+    elif "delete" in request.form:
+        if request.method == 'POST':
+            Birla.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+            flash(f'Successfully deleted all data', category='success')
+            return redirect('/BirlaEtAlModelMultiple')
     para = create_BirlaEtAlPlotMultiple(df['Site No.'].tolist(), table_data)
     y = df['Site No.']
     x = df['Site Unit']

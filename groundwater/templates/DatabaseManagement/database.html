@@ -132,7 +132,8 @@
             <a href="static/sample_db.csv" download><button type="button" class="btn btn-light">Download Sample File</button></a>
             <form method="post" enctype="multipart/form-data" class="dropzone-box">
                   <input name="file" type="file" class="btn btn-light btn-lg"/>
-                  <button type="submit" id="upload" class="btn btn-light">Upload</button>
+                  <button type="submit" name="upload" id="upload" class="btn btn-light">Upload</button>
+                <button type="submit" name="delete" id="delete" class="btn btn-light">Clear All</button>
               <button type="button" class="btn btn-light" id="add" data-toggle="modal" data-target="#myModal">Add Data
         </button>
                 </form>
@@ -162,208 +163,71 @@
                         <h4 class="modal-title">Please Insert Data</h4>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="">
-                {{form.hidden_tag()}}
-                <fieldset class="form-group">
-                    <div class="form-group">
-                        {{form.Site_Unit.label(class="form-control-label")}}
-                        {% if form.Site_Unit.errors %}
-                                {{form.Site_Unit(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Site_Unit.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Site_Unit(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Compound.label(class="form-control-label")}}
-                        {% if form.Compound.errors %}
-                                {{form.Compound(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Compound.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Compound(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Aquifer_thickness.label(class="form-control-label")}}
-                        {% if form.Aquifer_thickness.errors %}
-                                {{form.Aquifer_thickness(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Aquifer_thickness.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Aquifer_thickness(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Plume_length.label(class="form-control-label")}}
-                        {% if form.Plume_length.errors %}
-                                {{form.Plume_length(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Plume_length.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Plume_length(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Plume_Width.label(class="form-control-label")}}
-                        {% if form.Plume_Width.errors %}
-                                {{form.Plume_Width(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Plume_Width.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Plume_Width(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Hydraulic_conductivity.label(class="form-control-label")}}
-                        {% if form.Hydraulic_conductivity.errors %}
-                                {{form.Hydraulic_conductivity(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Hydraulic_conductivity.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Hydraulic_conductivity(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Electron_Donor.label(class="form-control-label")}}
-                        {% if form.Electron_Donor.errors %}
-                                {{form.Electron_Donor(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Electron_Donor.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Electron_Donor(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.O2.label(class="form-control-label")}}
-                        {% if form.O2.errors %}
-                                {{form.O2(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.O2.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.O2(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.NO3.label(class="form-control-label")}}
-                        {% if form.NO3.errors %}
-                                {{form.NO3(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.NO3.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.NO3(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.SO4.label(class="form-control-label")}}
-                        {% if form.SO4.errors %}
-                                {{form.SO4(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.SO4.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.SO4(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Fe.label(class="form-control-label")}}
-                        {% if form.Fe.errors %}
-                                {{form.Fe(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Fe.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Fe(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Plume_state.label(class="form-control-label")}}
-                        {% if form.Plume_state.errors %}
-                                {{form.Plume_state(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Plume_state.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Plume_state(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Chem_Group.label(class="form-control-label")}}
-                        {% if form.Chem_Group.errors %}
-                                {{form.Chem_Group(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Chem_Group.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Chem_Group(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Country.label(class="form-control-label")}}
-                        {% if form.Country.errors %}
-                                {{form.Country(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Country.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Country(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                    <div class="form-group">
-                        {{form.Literature_Source.label(class="form-control-label")}}
-                        {% if form.Literature_Source.errors %}
-                                {{form.Literature_Source(class="form-control form-control-lg is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.Literature_Source.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor%}
-                                </div>
-                            {% else %}
-                                {{form.Literature_Source(class="form-control form-control-lg")}}
-                            {% endif%}
-                    </div>
-                </fieldset>
+                        <form action="/database" method="POST">
                 <div class="form-group">
-                    {{form.submit(class="btn btn-outline-info")}}
-                </div>
+                  <label>Site Name :</label>
+                  <input type="text" class="form-control" id="name" name="name" required>
+               </div>
+                <div class="form-group">
+                  <label>Compound :</label>
+                  <input type="text" class="form-control" id="compound" name="compound" required>
+               </div>
+                <div class="form-group">
+                  <label>Aquifier Thickness :</label>
+                  <input type="number" class="form-control" id="aqui" name="aqui" required min=-1 step="any">
+               </div>
+                <div class="form-group">
+                  <label>Plume Length :</label>
+                  <input type="number" class="form-control" id="length" name="length" min=-1 step="any" required>
+               </div>
+                <div class="form-group">
+                  <label>Plume Width :</label>
+                  <input type="number" class="form-control" id="width" name="width" required min=-1 step="any">
+               </div>
+                <div class="form-group">
+                  <label>Hydraulic Conductivity :</label>
+                  <input type="number" class="form-control" id="conduct" name="conduct" required min=-1 step="any">
+               </div>
+                <div class="form-group">
+                  <label>Electron Donor :</label>
+                  <input type="number" class="form-control" id="donor" name="donor" required min=-1 step="any">
+               </div>
+                <div class="form-group">
+                  <label>Electron Acceptor :</label><br>
+                   <label>Oxygen :</label>
+                  <input type="number" class="form-control" id="o2" name="o2" required min=-1 step="any">
+               </div>
+                <div class="form-group">
+                  <label>Nitrate :</label>
+                  <input type="number" class="form-control" id="no3" name="no3" required min=-1 step="any">
+               </div>
+                <div class="form-group">
+                  <label>Sulphur Oxide :</label>
+                  <input type="number" class="form-control" id="so4" name="so4" required min=-1 step="any">
+               </div>
+                <div class="form-group">
+                  <label>Ferrous :</label>
+                  <input type="number" class="form-control" id="fe" name="fe" required min=-1 step="any">
+               </div>
+                <div class="form-group">
+                  <label>Plume State :</label>
+                  <input type="text" class="form-control" id="state" name="state" required>
+               </div>
+                <div class="form-group">
+                  <label>Chemical Group :</label>
+                  <input type="text" class="form-control" id="chem" name="chem" required>
+               </div>
+                <div class="form-group">
+                  <label>Country :</label>
+                  <input type="text" class="form-control" id="country" name="country" required>
+               </div>
+                <div class="form-group">
+                  <label>Literature Source :</label>
+                  <input type="text" class="form-control" id="source" name="source" required>
+               </div>
+               <div class="form-group">
+                  <button class="btn btn-primary" type="submit" name="open" value="open">Insert Data</button>
+               </div>
             </form>
                     </div>
                     <div class="modal-footer">
